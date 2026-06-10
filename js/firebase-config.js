@@ -23,12 +23,13 @@
  */
 
 const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyBEkhJW3TA7ysPYkhBImwgmXa-1qDLWocA",
-  authDomain: "algosort-1837c.firebaseapp.com",
-  projectId: "algosort-1837c",
-  storageBucket: "algosort-1837c.firebasestorage.app",
-  messagingSenderId: "546608772437",
-  appId: "1:546608772437:web:61d008dda2613cd49cabdc",
+  apiKey: "AIzaSyBFYfa49MCoXh93NaYi94FRDm2Rt0EYNV8",
+  authDomain: "mathsort-507d3.firebaseapp.com",
+  projectId: "mathsort-507d3",
+  storageBucket: "mathsort-507d3.firebasestorage.app",
+  messagingSenderId: "303352342405",
+  appId: "1:303352342405:web:de12acebaed2e8b29906ec",
+  measurementId: "G-1XV5BGCB34"
 };
 // ▲ ここまで
 
