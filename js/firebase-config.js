@@ -43,11 +43,11 @@ if (window.FIREBASE_ENABLED) {
     firebase.initializeApp(FIREBASE_CONFIG);
     window.db = firebase.firestore();
     window.firebaseAuth = firebase.auth();
-    console.info('[AlgoSort] Firebase initialized.');
+    console.info('[MathSort] Firebase initialized.');
   } catch (e) {
-    console.warn('[AlgoSort] Firebase initialization failed:', e);
+    console.warn('[MathSort] Firebase initialization failed:', e);
     window.FIREBASE_ENABLED = false;
   }
 } else {
-  console.info('[AlgoSort] Firebase not configured – community features disabled.');
+  console.info('[MathSort] Firebase not configured – community features disabled.');
 }
