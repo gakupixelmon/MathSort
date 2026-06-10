@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d1117" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>MathSort - 証明ステップ並び替えパズル</title>
+  <meta name="description" content="数学の証明ステップを正しい順序に並び替えるパズルゲーム。定理の証明を楽しく学ぼう。" />
+  <!-- KaTeX (数式レンダリング) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/game.css" />
+  <link rel="stylesheet" href="css/profile.css" />
+</head>
+<body>
+
+  <!-- ========== ホーム画面 ========== -->
+  <div id="home" class="screen">
+    <div class="home-hero">
+      <div class="home-logo">
+        <div class="logo-icon">📐</div>
+        <span class="logo-text">MathSort</span>
+      </div>
+      <p class="home-tagline">証明ステップを並び替えて、数学をマスターしよう</p>
+    </div>
+
+    <!-- GitHub 認証セクション -->
+    <div id="auth-section" class="auth-section" style="display:none;">
+      <!-- 未ログイン時 -->
+      <button id="auth-login-btn" class="btn-github-login" style="display:none;">
+        <svg class="github-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+        </svg>
+        GitHubでログイン
+      </button>
+      <!-- ログイン済み時 -->
+      <div id="auth-user-info" class="auth-user-info" style="display:none;">
+        <img id="auth-avatar" class="auth-avatar" src="" alt="avatar" />
+        <span id="auth-username" class="auth-username"></span>
+        <button id="auth-logout-btn" class="auth-logout-btn">ログアウト</button>
+      </div>
+    </div>
+
+    <!-- プロフィールURLコピーボタン（ログイン済み時に表示） -->
+    <div id="profile-link-container"></div>
+
+    <!-- ストリークカード -->
+    <div class="streak-card">
+      <div class="streak-main">
+        <span class="streak-fire" id="streak-fire">🔥</span>
+        <div>
+          <div class="streak-number" id="streak-count">0</div>
+          <div class="streak-label">日連続<br>チャレンジ中</div>
+        </div>
+      </div>
+      <div class="streak-stats">
+        <div class="streak-stat">最高 <span id="max-streak">0</span> 日</div>
+        <div class="streak-stat">累計 <span id="total-solved">0</span> 問</div>
+      </div>
+    </div>
+
+    <!-- ボタン -->
+    <div class="home-buttons">
+      <button id="btn-random" class="btn btn-primary">
+        <span class="btn-random-icon">🎲</span>
+        ランダムに挑戦
+      </button>
+      <button id="btn-category" class="btn btn-secondary">
+        <span class="btn-category-icon">📚</span>
+        カテゴリから選ぶ
+      </button>
+    </div>
+  </div>
+
+  <!-- ========== 難易度選択画面（ランダムモード用） ========== -->
+  <div id="difficulty-select" class="screen">
+    <div class="app-container">
+      <div class="header">
+        <button id="difficulty-back" class="back-btn">←</button>
+        <h2 class="header-title">難易度を選ぶ</h2>
+      </div>
+      <p class="difficulty-subtitle">挑戦したい難易度を選択してください。その難易度の問題からランダムに出題されます。</p>
+      <div id="difficulty-grid"></div>
+    </div>
+  </div>
+
+  <!-- ========== カテゴリ選択画面 ========== -->
+  <div id="categories" class="screen">
+    <div class="app-container">
+      <div class="header">
+        <button id="categories-back" class="back-btn">←</button>
+        <h2 class="header-title">カテゴリ</h2>
+      </div>
+      <div id="category-grid"></div>
+    </div>
+  </div>
+
+  <!-- ========== ステージ選択画面 ========== -->
+  <div id="stages" class="screen">
+    <div class="app-container">
+      <div class="header">
+        <button id="stages-back" class="back-btn">←</button>
+        <h2 class="header-title" id="stages-title">ステージ選択</h2>
+      </div>
+      <div id="stage-list"></div>
+    </div>
+  </div>
+
+  <!-- ========== ゲーム画面 ========== -->
+  <div id="game" class="screen">
+
+    <!-- ゲームヘッダー（タイトル・バッジのみ） -->
+    <div class="game-header">
+      <button id="game-back" class="back-btn">←</button>
+      <div class="game-meta">
+        <div class="game-title-row">
+          <span id="game-title">タイトル</span>
+          <span class="difficulty-badge" id="game-difficulty">★☆☆☆☆</span>
+          <span class="lang-badge" id="game-lang">証明</span>
+        </div>
+      </div>
+      <!-- PC用タブボタン -->
+      <div class="page-tabs" id="page-tabs" aria-hidden="true">
+        <button class="page-tab active" data-page="0" id="tab-problem">📝 定理</button>
+        <button class="page-tab" data-page="1" id="tab-code">✏️ 証明</button>
+      </div>
+      <!-- スマホ用ページインジケーター -->
+      <div class="page-indicator" id="page-indicator" aria-hidden="true">
+        <span class="page-dot active" data-page="0"></span>
+        <span class="page-dot" data-page="1"></span>
+      </div>
+    </div>
+
+    <!-- ゲームボディ（スマホ：スワイプスライダー / デスクトップ：縦並び） -->
+    <div class="game-body">
+
+      <!-- スライダートラック -->
+      <div class="game-slider" id="game-slider">
+
+        <!-- ページ1：問題文 -->
+        <div class="game-page" id="game-page-0">
+          <div class="problem-statement-card">
+            <div class="problem-statement-label">📝 定理</div>
+            <p class="problem-statement-text" id="game-description">問題の説明</p>
+          </div>
+          <!-- 入力形式カード（JSで動的に生成） -->
+          <div class="input-format-card" id="input-format-card" style="display:none;">
+            <div class="input-format-label">📋 前提条件</div>
+            <div class="input-format-content" id="input-format-content"></div>
+          </div>
+          <!-- コミュニティ統計チップ -->
+          <div id="community-problem-stats" class="community-problem-stats" style="display:none;"></div>
+        </div>
+
+        <!-- ページ2：証明欄 -->
+        <div class="game-page" id="game-page-1">
+          <div class="game-body-right">
+
+            <!-- 正解エリア -->
+            <div class="answer-section">
+                <div class="zone-label">
+                    📋 並び替える
+                    <span class="zone-label-hint">タップ移動 / 長押しでドラッグ</span>
+                  </div>
+              <div id="answer-zone" class="drop-zone"></div>
+            </div>
+
+            <!-- 選択肢エリア -->
+            <div class="choices-section">
+                <div class="zone-label">
+                    🧩 証明ステップ
+                    <span class="zone-label-hint">タップ移動 / 長押しでドラッグ</span>
+                  </div>
+              <div id="choices-zone" class="drop-zone"></div>
+            </div>
+
+          </div>
+        </div>
+
+      </div> <!-- /#game-slider -->
+
+    </div>
+
+    <!-- ゲームフッター -->
+    <div class="game-footer">
+      <div class="hint-area">
+        <!-- ヒントナビゲーションバー（ヒント開示後に表示） -->
+        <div class="hint-nav" id="hint-nav" hidden>
+          <button class="hint-nav-btn" id="hint-prev-btn" aria-label="前のヒント">‹</button>
+          <span class="hint-counter" id="hint-counter">1 / 1</span>
+          <button class="hint-nav-btn" id="hint-next-btn" aria-label="次のヒント">›</button>
+        </div>
+        <!-- ヒントテキスト -->
+        <div id="hint-text"></div>
+        <!-- 新しいヒントを開示するボタン -->
+        <button id="hint-btn">💡 ヒント (残り3)</button>
+      </div>
+      <div class="game-actions">
+        <button id="check-btn">✓ 正解チェック</button>
+        <button id="give-up-btn">🏳 諦める</button>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ========== 結果画面 ========== -->
+  <div id="result" class="screen">
+    <div class="result-container">
+
+      <!-- スコアリング -->
+      <div class="result-score-ring">
+        <div id="result-score">S</div>
+      </div>
+
+      <div id="result-streak">🔥 0 日連続</div>
+
+      <!-- 詳細 -->
+      <div class="result-info">
+        <div class="result-card">
+          <div id="result-title">問題タイトル</div>
+          <div id="result-message">メッセージ</div>
+          <div class="result-stats">
+            <div class="result-stat">
+              <div class="result-stat-value" id="result-hints">-</div>
+              <div class="result-stat-label">ヒント使用</div>
+            </div>
+            <div class="result-stat">
+              <div class="result-stat-value" id="result-time">-</div>
+              <div class="result-stat-label">クリアタイム</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ボタン -->
+      <div class="result-buttons">
+        <button id="result-retry" class="btn btn-secondary">🔄 もう一度</button>
+        <button id="result-next" class="btn btn-primary">▶ 次の問題</button>
+        <button id="result-home" class="btn btn-ghost">🏠 ホームへ</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== プロフィール画面 ========== -->
+  <div id="profile" class="screen">
+    <!-- JS (profile.js) で動的に生成 -->
+  </div>
+
+  <!-- Firebase SDK (compat版 v10) -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <!-- Firebase 設定・認証・コミュニティ統計 -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/community.js"></script>
+
+  <!-- スクリプト（順序重要） -->
+  <!-- ▼ 問題ファイル（registry.js より前に全て読み込む） -->
+  <!-- statistics: 統計学 -->
+  <script src="js/data/statistics/stat_001.js"></script>
+  <!-- ▼ レジストリ（問題を集約して PROBLEMS_DB / DataManager を構築） -->
+  <script src="js/data/registry.js"></script>
+  <!-- ▼ プロフィール・草グラフ -->
+  <script src="js/profile.js"></script>
+  <!-- ▼ アプリ本体 -->
+  <script src="js/storage.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/app.js"></script>
+
+
+</body>
+</html>

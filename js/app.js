@@ -1,0 +1,492 @@
+/**
+ * app.js - メインアプリケーション
+ * 画面遷移・ルーティング管理
+ */
+
+const App = (() => {
+  let currentScreen = 'home';
+  const screens = {};
+  let feedbackTimer = null;
+
+  function init() {
+    document.querySelectorAll('.screen').forEach((el) => {
+      screens[el.id] = el;
+    });
+    Storage.checkStreakValidity();
+    // Firebase が有効な場合のみ認証を初期化
+    if (window.FIREBASE_ENABLED && window.AuthManager) AuthManager.init();
+    _setupAuthButtons();
+
+    // ?user=xxx が URL にあればプロフィール画面を表示、なければホーム
+    if (window.FIREBASE_ENABLED && window.ProfileManager) {
+      ProfileManager.checkAndShow().then((isProfile) => {
+        if (!isProfile) navigateTo('home');
+      });
+    } else {
+      navigateTo('home');
+    }
+  }
+
+  // 認証ボタンのイベントリスナーを設定
+  function _setupAuthButtons() {
+    const loginBtn  = document.getElementById('auth-login-btn');
+    const logoutBtn = document.getElementById('auth-logout-btn');
+    if (loginBtn)  loginBtn.addEventListener('click',  () => { if (window.AuthManager) AuthManager.signInWithGitHub(); });
+    if (logoutBtn) logoutBtn.addEventListener('click', () => { if (window.AuthManager) AuthManager.signOut(); });
+  }
+
+  function navigateTo(screenId, params = {}) {
+    Object.values(screens).forEach((s) => s.classList.remove('active'));
+    currentScreen = screenId;
+    const target = screens[screenId];
+    if (!target) return;
+    target.classList.add('active');
+
+    if (screenId === 'home') renderHome();
+    else if (screenId === 'difficulty-select') renderDifficultySelect();
+    else if (screenId === 'categories') renderCategories();
+    else if (screenId === 'stages') renderStages(params.categoryId);
+    else if (screenId === 'game') renderGame(params.problemId, params.fromRandom, params.selectedDifficulty);
+    else if (screenId === 'result') renderResult(params);
+
+    window.scrollTo(0, 0);
+  }
+
+  // ======= ホーム画面 =======
+  function renderHome() {
+    const streak = Storage.getStreak();
+    const currentStreak = Storage.checkStreakValidity();
+
+    const streakEl = document.getElementById('streak-count');
+    const maxStreakEl = document.getElementById('max-streak');
+    const totalEl = document.getElementById('total-solved');
+
+    if (streakEl) streakEl.textContent = currentStreak;
+    if (maxStreakEl) maxStreakEl.textContent = streak.max;
+    if (totalEl) totalEl.textContent = Storage.getTotalSolved();
+
+    const fireEl = document.getElementById('streak-fire');
+    if (fireEl) fireEl.style.display = currentStreak > 0 ? 'inline' : 'none';
+
+    const randomBtn = document.getElementById('btn-random');
+    const categoryBtn = document.getElementById('btn-category');
+
+    if (randomBtn) {
+      randomBtn.replaceWith(randomBtn.cloneNode(true));
+      document.getElementById('btn-random').addEventListener('click', () => {
+        navigateTo('difficulty-select');
+      });
+    }
+    if (categoryBtn) {
+      categoryBtn.replaceWith(categoryBtn.cloneNode(true));
+      document.getElementById('btn-category').addEventListener('click', () => {
+        navigateTo('categories');
+      });
+    }
+  }
+
+  // ======= 難易度選択画面 =======
+  function renderDifficultySelect() {
+    const grid = document.getElementById('difficulty-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    const available = DataManager.getAvailableDifficulties();
+    // 1〜5 全て表示（問題なしはロック）
+    for (let d = 1; d <= 5; d++) {
+      const problems = DataManager.getProblemsByDifficulty(d);
+      const hasProblems = problems.length > 0;
+      const stars = '★'.repeat(d) + '☆'.repeat(5 - d);
+
+      const diffLabels = ['', '入門', '初級', '中級', '上級', 'エキスパート'];
+      const diffColors = ['', '#22d3ee', '#34d399', '#fbbf24', '#fb923c', '#f472b6'];
+      const diffDescs = [
+        '',
+        '基本的な定理と証明手法を学ぼう',
+        '様々な定理を使いこなす',
+        '複数の概念を組み合わせる証明',
+        '高度な証明テクニックを活用',
+        '大学院レベルの数学',
+      ];
+
+      const card = document.createElement('div');
+      card.className = `difficulty-card${hasProblems ? '' : ' locked'}`;
+      card.style.setProperty('--diff-color', diffColors[d]);
+      card.innerHTML = `
+        <div class="diff-stars">${stars}</div>
+        <div class="diff-info">
+          <div class="diff-level">難易度 ${d} <span class="diff-label-text">${diffLabels[d]}</span></div>
+          <div class="diff-desc">${hasProblems ? `${problems.length} 問 ／ ${diffDescs[d]}` : 'Coming Soon'}</div>
+        </div>
+        <div class="diff-arrow">${hasProblems ? '→' : '🔒'}</div>
+      `;
+
+      if (hasProblems) {
+        card.addEventListener('click', () => {
+          const p = DataManager.getRandomProblemByDifficulty(d);
+          if (p) navigateTo('game', { problemId: p.id, fromRandom: true, selectedDifficulty: d });
+        });
+      }
+
+      grid.appendChild(card);
+    }
+
+    const backBtn = document.getElementById('difficulty-back');
+    if (backBtn) {
+      backBtn.replaceWith(backBtn.cloneNode(true));
+      document.getElementById('difficulty-back').addEventListener('click', () => navigateTo('home'));
+    }
+  }
+
+  // ======= カテゴリ選択画面 =======
+  function renderCategories() {
+    const grid = document.getElementById('category-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    const categories = DataManager.getCategories();
+    categories.forEach((cat) => {
+      const problems = DataManager.getProblemsByCategory(cat.id);
+      const cleared = problems.filter((p) => Storage.isClear(p.id)).length;
+
+      const card = document.createElement('div');
+      card.className = `category-card${cat.available ? '' : ' locked'}`;
+      card.style.setProperty('--cat-color', cat.color);
+
+      // ランダムモード対象外バッジ
+      const notRandomBadge = (!cat.randomEligible)
+        ? '<span class="not-random-badge">ランダム対象外</span>'
+        : '';
+
+      card.innerHTML = `
+        <div class="cat-icon">${cat.icon}</div>
+        <div class="cat-info">
+          <div class="cat-label-row">
+            <span class="cat-label">${cat.label}</span>
+            ${notRandomBadge}
+          </div>
+          <div class="cat-progress">${cat.available ? `${cleared} / ${problems.length} クリア` : 'Coming Soon'}</div>
+        </div>
+        ${cat.available ? '' : '<div class="lock-icon">🔒</div>'}
+      `;
+
+      if (cat.available) {
+        card.addEventListener('click', () => navigateTo('stages', { categoryId: cat.id }));
+      }
+
+      grid.appendChild(card);
+    });
+
+    const backBtn = document.getElementById('categories-back');
+    if (backBtn) {
+      backBtn.replaceWith(backBtn.cloneNode(true));
+      document.getElementById('categories-back').addEventListener('click', () => navigateTo('home'));
+    }
+  }
+
+  // ======= ステージ選択画面 =======
+  function renderStages(categoryId) {
+    const list = document.getElementById('stage-list');
+    if (!list) return;
+    list.innerHTML = '';
+
+    const problems = DataManager.getProblemsByCategory(categoryId);
+    const cat = DataManager.getCategories().find((c) => c.id === categoryId);
+
+    const titleEl = document.getElementById('stages-title');
+    if (titleEl && cat) titleEl.textContent = cat.label;
+
+    problems.forEach((problem) => {
+      const isCleared = Storage.isClear(problem.id);
+      const stars = '★'.repeat(problem.difficulty) + '☆'.repeat(5 - problem.difficulty);
+      const langMap = { 'proof': '証明', 'cpp': 'C++', 'python': 'Python' };
+      const langBadge = langMap[problem.language] || problem.language.toUpperCase();
+
+      const item = document.createElement('div');
+      item.className = `stage-item${isCleared ? ' cleared' : ''}`;
+      item.innerHTML = `
+        <div class="stage-left">
+          <div class="stage-title">${problem.title}</div>
+          <div class="stage-meta">
+            <span class="stage-difficulty">${stars}</span>
+            <span class="stage-lang-badge">${langBadge}</span>
+            <span id="community-badge-${problem.id}" class="community-badge" style="display:none;"></span>
+          </div>
+        </div>
+        <div class="stage-right">
+          ${isCleared ? '<span class="clear-badge">✓ CLEAR</span>' : '<span class="play-badge">▶ PLAY</span>'}
+        </div>
+      `;
+      item.addEventListener('click', () => {
+        navigateTo('game', { problemId: problem.id, fromRandom: false });
+      });
+      list.appendChild(item);
+    });
+
+    // コミュニティ統計を非同期で取得・表示
+    if (window.FIREBASE_ENABLED && window.CommunityStats) {
+      const problemIds = problems.map((p) => p.id);
+      CommunityStats.getBatchStats(problemIds).then((stats) => {
+        problems.forEach((p) => {
+          const s     = stats[p.id];
+          const badge = document.getElementById(`community-badge-${p.id}`);
+          if (badge && s && (s.attemptCount > 0 || s.clearCount > 0)) {
+            const parts = [];
+            if (s.attemptCount > 0) parts.push(`🌍 ${s.attemptCount}人が挑戦`);
+            if (s.clearCount   > 0) parts.push(`✓ ${s.clearCount}人がクリア`);
+            badge.textContent    = parts.join('  ');
+            badge.style.display  = 'inline-flex';
+          }
+        });
+      });
+    }
+
+    const backBtn = document.getElementById('stages-back');
+    if (backBtn) {
+      backBtn.replaceWith(backBtn.cloneNode(true));
+      document.getElementById('stages-back').addEventListener('click', () => navigateTo('categories'));
+    }
+  }
+
+  // ======= ゲーム画面 =======
+  let currentGameProblem = null;
+  let currentFromRandom = false;
+  let currentSelectedDifficulty = null;
+
+  function renderGame(problemId, fromRandom, selectedDifficulty) {
+    const problem = DataManager.getProblemById(problemId);
+    if (!problem) return;
+
+    currentGameProblem = problem;
+    currentFromRandom = fromRandom;
+    currentSelectedDifficulty = selectedDifficulty || null;
+
+    // ヘッダー情報
+    document.getElementById('game-title').textContent = problem.title;
+    document.getElementById('game-description').textContent = problem.description;
+    // 問題文の数式をレンダリング
+    renderMathIn(document.getElementById('game-description'));
+    document.getElementById('game-difficulty').textContent =
+      '★'.repeat(problem.difficulty) + '☆'.repeat(5 - problem.difficulty);
+
+    // 入力形式の表示
+    const inputFormatCard = document.getElementById('input-format-card');
+    const inputFormatContent = document.getElementById('input-format-content');
+    if (inputFormatCard && inputFormatContent) {
+      if (problem.inputFormat && problem.inputFormat.params && problem.inputFormat.params.length > 0) {
+        inputFormatContent.innerHTML = '';
+        // 各パラメータ行を生成
+        problem.inputFormat.params.forEach((param) => {
+          const row = document.createElement('div');
+          row.className = 'input-format-row';
+          row.innerHTML = `
+            <span class="input-format-name">${escapeHtml(param.name)}</span>
+            <span class="input-format-type">${escapeHtml(param.type)}</span>
+            <span class="input-format-desc">${escapeHtml(param.desc)}</span>
+          `;
+          inputFormatContent.appendChild(row);
+        });
+        // 補足ノート（constraints等）
+        if (problem.inputFormat.note) {
+          const note = document.createElement('div');
+          note.className = 'input-format-note';
+          note.textContent = problem.inputFormat.note;
+          inputFormatContent.appendChild(note);
+        }
+
+        if (problem.inputFormat.examples) {
+          problem.inputFormat.examples.forEach((ex, idx) => {
+            const exContainer = document.createElement('div');
+            exContainer.className = 'input-format-example';
+            
+            const exTitle = document.createElement('div');
+            exTitle.className = 'example-title';
+            exTitle.textContent = `【入力例・出力例 ${idx + 1}】`;
+            exContainer.appendChild(exTitle);
+            
+            const exInputLabel = document.createElement('div');
+            exInputLabel.className = 'example-label';
+            exInputLabel.textContent = '入力:';
+            exContainer.appendChild(exInputLabel);
+
+            const exInput = document.createElement('pre');
+            exInput.className = 'example-code';
+            exInput.textContent = ex.input;
+            exContainer.appendChild(exInput);
+
+            const exOutputLabel = document.createElement('div');
+            exOutputLabel.className = 'example-label';
+            exOutputLabel.textContent = '出力:';
+            exContainer.appendChild(exOutputLabel);
+
+            const exOutput = document.createElement('pre');
+            exOutput.className = 'example-code';
+            exOutput.textContent = ex.output;
+            exContainer.appendChild(exOutput);
+            
+            if (ex.explanation) {
+              const exExpLabel = document.createElement('div');
+              exExpLabel.className = 'example-label';
+              exExpLabel.textContent = '説明:';
+              exContainer.appendChild(exExpLabel);
+              const exExp = document.createElement('div');
+              exExp.className = 'example-explanation';
+              exExp.textContent = ex.explanation;
+              exContainer.appendChild(exExp);
+            }
+
+            inputFormatContent.appendChild(exContainer);
+          });
+        }
+        inputFormatCard.style.display = '';
+      } else {
+        inputFormatCard.style.display = 'none';
+      }
+    }
+
+    const langEl = document.getElementById('game-lang');
+    const langMap = { 'proof': '証明', 'cpp': 'C++', 'python': 'Python' };
+    langEl.textContent = langMap[problem.language] || problem.language.toUpperCase();
+    langEl.className = `lang-badge lang-${problem.language}`;
+
+    const hintText = document.getElementById('hint-text');
+    if (hintText) hintText.textContent = '';
+
+    // 戻るボタン
+    const backBtn = document.getElementById('game-back');
+    if (backBtn) {
+      backBtn.replaceWith(backBtn.cloneNode(true));
+      document.getElementById('game-back').addEventListener('click', () => {
+        if (fromRandom) navigateTo('difficulty-select');
+        else navigateTo('stages', { categoryId: problem.category });
+      });
+    }
+
+    // ゲームエンジン初期化
+    GameEngine.init(
+      problem,
+      {
+        answerZone: document.getElementById('answer-zone'),
+        choicesZone: document.getElementById('choices-zone'),
+        hintBtn: document.getElementById('hint-btn'),
+        hintText: document.getElementById('hint-text'),
+        checkBtn: document.getElementById('check-btn'),
+        giveUpBtn: document.getElementById('give-up-btn'),
+      },
+      (result) => {
+        const newStreak = Storage.recordClear(problem.id);
+        // Firebase が有効ならクリアを記録
+        if (window.FIREBASE_ENABLED && window.CommunityStats) CommunityStats.recordClear(problem.id);
+        navigateTo('result', {
+          problemId: problem.id,
+          score: result.score,
+          hintsUsed: result.hintsUsed,
+          elapsed: result.elapsed,
+          streak: newStreak,
+          fromRandom,
+          selectedDifficulty: currentSelectedDifficulty,
+        });
+      }
+    );
+
+    // Firebase が有効なら挑戦記録を書き込み・問題ページ統計を表示
+    if (window.FIREBASE_ENABLED && window.CommunityStats) {
+      CommunityStats.recordAttempt(problem.id);
+      // コミュニティ統計チップを更新
+      const statsEl = document.getElementById('community-problem-stats');
+      if (statsEl) {
+        CommunityStats.getProblemStats(problem.id).then((stats) => {
+          if (stats && stats.attemptCount > 0) {
+            const parts = [`🌍 ${stats.attemptCount}人が挑戦中`];
+            if (stats.clearCount > 0) parts.push(`✓ ${stats.clearCount}人がクリア済み`);
+            statsEl.textContent   = parts.join('　');
+            statsEl.style.display = 'flex';
+          } else {
+            statsEl.style.display = 'none';
+          }
+        });
+      }
+    } else {
+      const statsEl = document.getElementById('community-problem-stats');
+      if (statsEl) statsEl.style.display = 'none';
+    }
+  }
+
+  // ======= 結果画面 =======
+  function renderResult(params) {
+    const { problemId, score, hintsUsed, elapsed, streak, fromRandom, selectedDifficulty } = params;
+    const problem = DataManager.getProblemById(problemId);
+
+    const scoreColors = { S: '#fbbf24', A: '#34d399', B: '#60a5fa', C: '#a78bfa' };
+
+    document.getElementById('result-score').textContent = score;
+    document.getElementById('result-score').style.color = scoreColors[score] || '#fff';
+    document.getElementById('result-title').textContent = problem ? problem.title : '';
+    document.getElementById('result-hints').textContent = `${hintsUsed} 回`;
+    document.getElementById('result-time').textContent = formatTime(elapsed);
+    document.getElementById('result-streak').textContent = `🔥 ${streak} 日連続`;
+
+    const messages = {
+      S: '完璧！ヒントなしでクリア！',
+      A: 'Great! もう少しで完璧！',
+      B: 'Good! 練習を続けよう！',
+      C: 'Keep going! 次回はヒント少なく！',
+    };
+    document.getElementById('result-message').textContent = messages[score] || '';
+
+    const retryBtn = document.getElementById('result-retry');
+    const nextBtn = document.getElementById('result-next');
+    const homeBtn = document.getElementById('result-home');
+
+    if (retryBtn) {
+      retryBtn.replaceWith(retryBtn.cloneNode(true));
+      document.getElementById('result-retry').addEventListener('click', () => {
+        navigateTo('game', { problemId, fromRandom, selectedDifficulty });
+      });
+    }
+    if (nextBtn) {
+      nextBtn.replaceWith(nextBtn.cloneNode(true));
+      document.getElementById('result-next').addEventListener('click', () => {
+        if (fromRandom && selectedDifficulty) {
+          // 同じ難易度からランダムに次の問題
+          const p = DataManager.getRandomProblemByDifficulty(selectedDifficulty);
+          if (p) navigateTo('game', { problemId: p.id, fromRandom: true, selectedDifficulty });
+          else navigateTo('difficulty-select');
+        } else {
+          const p = DataManager.getRandomProblem();
+          navigateTo('game', { problemId: p.id, fromRandom: true });
+        }
+      });
+    }
+    if (homeBtn) {
+      homeBtn.replaceWith(homeBtn.cloneNode(true));
+      document.getElementById('result-home').addEventListener('click', () => navigateTo('home'));
+    }
+  }
+
+  function formatTime(seconds) {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return m > 0 ? `${m}分${s}秒` : `${s}秒`;
+  }
+
+  function showFeedback(msg, type = 'info') {
+    let toast = document.getElementById('feedback-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'feedback-toast';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.className = `feedback-toast ${type} show`;
+    if (feedbackTimer) clearTimeout(feedbackTimer);
+    feedbackTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  function getCurrentScreen() { return currentScreen; }
+
+  return { init, navigateTo, showFeedback, renderHome, getCurrentScreen };
+})();
+
+document.addEventListener('DOMContentLoaded', () => App.init());
+window.App = App;
