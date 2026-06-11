@@ -19,4 +19,18 @@ npm-debug.log*
 .idea/
 *.swp
 *.swo
-.vercel
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Capacitor & Android
+android/
+ios/
+capacitor.config.json
+capacitor.config.ts
+www/
+
+# Obsidian ローカルノート（プライベート・GitHub非公開）
+Obsidian ローカル/
