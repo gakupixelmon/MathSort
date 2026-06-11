@@ -1,13 +1,13 @@
-// stat_001: 標本分散の不偏性の証明 ★3
-// 統計学の古典的定理: E[S^2] = σ^2
+// stat_001: 不偏分散の不偏性の証明 ★3
+// 統計学の古典的定理: E[S^2] = σ^2（S^2 は分母 n-1 の不偏分散）
 (window.PROBLEMS_REGISTRY = window.PROBLEMS_REGISTRY || []).push({
   id: 'stat_001',
-  title: '標本分散の不偏性の証明',
+  title: '不偏分散の不偏性の証明',
   category: 'statistics',
   categoryLabel: '統計学',
   difficulty: 3,
   language: 'proof',
-  description: '【定理（標本分散の不偏性）】\n$X_1, X_2, \\ldots, X_n$ を母平均 $\\mu$, 母分散 $\\sigma^2$ の母集団からの無作為標本とする。\n標本平均を $\\bar{X} = \\frac{1}{n}\\sum_{i=1}^{n}X_i$ とし、\n標本分散を $S^2 = \\frac{1}{n-1}\\sum_{i=1}^{n}(X_i - \\bar{X})^2$ と定義するとき、\n$$E[S^2] = \\sigma^2$$\nが成り立つ。すなわち $S^2$ は $\\sigma^2$ の不偏推定量である。\n\n以下の証明ステップを正しい順序に並び替えよ。',
+  description: '【定理（不偏分散の不偏性）】\n$X_1, X_2, \\ldots, X_n$ を母平均 $\\mu$, 母分散 $\\sigma^2$ の母集団からの無作為標本とする。\n標本平均を $\\bar{X} = \\frac{1}{n}\\sum_{i=1}^{n}X_i$ とし、\n不偏分散を $S^2 = \\frac{1}{n-1}\\sum_{i=1}^{n}(X_i - \\bar{X})^2$ と定義するとき、\n$$E[S^2] = \\sigma^2$$\nが成り立つ。すなわち $S^2$ は $\\sigma^2$ の不偏推定量である。\n\n以下の証明ステップを正しい順序に並び替えよ。',
   pinnedCode: [
     '【証明】',
   ],
