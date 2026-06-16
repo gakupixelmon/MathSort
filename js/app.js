@@ -263,7 +263,9 @@ const App = (() => {
 
     // ヘッダー情報
     document.getElementById('game-title').textContent = problem.title;
-    document.getElementById('game-description').textContent = problem.description;
+    // \n を <br> に変換して表示（数式部分はそのまま残す）
+    document.getElementById('game-description').innerHTML =
+      problem.description.replace(/\n/g, '<br>');
     // 問題文の数式をレンダリング
     renderMathIn(document.getElementById('game-description'));
     document.getElementById('game-difficulty').textContent =

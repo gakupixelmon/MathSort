@@ -7,7 +7,7 @@
   categoryLabel: '統計学',
   difficulty: 3,
   language: 'proof',
-  description: '【定理（弱大数の法則）】\\n$X_1, X_2, \\ldots, X_n$ を互いに独立で同一の分布に従う確率変数列とし、\\n共通の平均 $\\mu = E[X_i]$、分散 $\\sigma^2 = \\mathrm{Var}(X_i) < \\infty$ をもつとする。\\n標本平均を $\\bar{X}_n = \\frac{1}{n}\\sum_{i=1}^{n}X_i$ と定義するとき、\\n任意の $\\varepsilon > 0$ に対して\\n$$P\\left(|\\bar{X}_n - \\mu| \\geq \\varepsilon\\right) \\to 0 \\quad (n \\to \\infty)$$\\nが成り立つ。すなわち $\\bar{X}_n$ は $\\mu$ に確率収束する。\\n\\n以下の証明ステップを正しい順序に並び替えよ。',
+  description: '【定理（弱大数の法則）】\n$X_1, X_2, \\ldots, X_n$ を互いに独立で同一の分布に従う確率変数列とし、\n共通の平均 $\\mu = E[X_i]$、分散 $\\sigma^2 = \\mathrm{Var}(X_i) < \\infty$ をもつとする。\n標本平均を $\\bar{X}_n = \\frac{1}{n}\\sum_{i=1}^{n}X_i$ と定義するとき、\n任意の $\\varepsilon > 0$ に対して\n$$P\\left(|\\bar{X}_n - \\mu| \\geq \\varepsilon\\right) \\to 0 \\quad (n \\to \\infty)$$\nが成り立つ。すなわち $\\bar{X}_n$ は $\\mu$ に確率収束する。\n\n以下の証明ステップを正しい順序に並び替えよ。',
   pinnedCode: [
     '【証明】',
   ],
