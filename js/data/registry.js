@@ -38,6 +38,14 @@ const CATEGORIES = window.CATEGORIES = [
     available: true,
     randomEligible: true,
   },
+  {
+    id: 'ml',
+    label: '機械学習',
+    icon: '🤖',
+    color: '#a78bfa',
+    available: true,
+    randomEligible: true,
+  },
 ];
 
 // ── DataManager ───────────────────────────────────────────
