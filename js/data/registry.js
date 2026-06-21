@@ -39,12 +39,14 @@ const CATEGORIES = window.CATEGORIES = [
     randomEligible: true,
   },
   {
-    id: 'ml',
-    label: '機械学習',
-    icon: '🤖',
+    id: 'papers_2021Cohen',
+    label: '論文 / 2021Cohen',
+    icon: '📄',
     color: '#a78bfa',
     available: true,
     randomEligible: true,
+    paperTitle: 'Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability',
+    paperAuthors: 'Cohen et al. (ICLR 2022)',
   },
 ];
 

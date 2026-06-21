@@ -4,8 +4,8 @@
 (window.PROBLEMS_REGISTRY = window.PROBLEMS_REGISTRY || []).push({
   id: 'ml_003',
   title: 'Polyak（Heavy Ball）モメンタムの発散条件（Theorem 2）',
-  category: 'ml',
-  categoryLabel: '機械学習',
+  category: 'papers_2021Cohen',
+  categoryLabel: '論文 / 2021Cohen',
   difficulty: 4,
   language: 'proof',
   description: '【Theorem 2（Cohen et al., 2022 — Edge of Stability）】\n二次目的関数 $f(x) = \\frac{1}{2}x^T Ax + b^T x + c$ に対し，ステップ幅 $\\eta > 0$，モメンタム係数 $0 \\leq \\beta < 1$ の Polyak（Heavy Ball）モメンタム法\n$$v_{t+1} = \\beta v_t - \\eta \\nabla f(x_t), \\quad x_{t+1} = x_t + v_{t+1}$$\nを任意の初期点から実行する。\n$(q, a)$ を $A$ の固有ベクトル・固有値ペアとするとき，\n$$a > \\frac{1}{\\eta}(2 + 2\\beta)$$\nならば，数列 $\\{q^T x_t\\}$ は発散する。\n\n以下の証明ステップを正しい順序に並び替えよ。',
