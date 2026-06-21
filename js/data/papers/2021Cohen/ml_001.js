@@ -4,8 +4,8 @@
 (window.PROBLEMS_REGISTRY = window.PROBLEMS_REGISTRY || []).push({
   id: 'ml_001',
   title: '二次関数上の勾配降下法の発散条件（Proposition 1）',
-  category: 'ml',
-  categoryLabel: '機械学習',
+  category: 'papers_2021Cohen',
+  categoryLabel: '論文 / 2021Cohen',
   difficulty: 3,
   language: 'proof',
   description: '【Proposition 1（Cohen et al., 2022 — Edge of Stability）】\n対称正定値行列 $A \\in \\mathbb{R}^{d \\times d}$，ベクトル $b \\in \\mathbb{R}^d$，スカラー $c \\in \\mathbb{R}$ による二次目的関数\n$$f(x) = \\frac{1}{2} x^T A x + b^T x + c$$\nに対し，ステップ幅 $\\eta > 0$ の勾配降下法\n$$x_{t+1} = x_t - \\eta \\nabla f(x_t)$$\nを任意の初期点 $x_0$ から実行する。\n$(q, a)$ を $A$ の固有ベクトル・固有値ペアとする。\n$$a > \\frac{2}{\\eta}$$\nならば，数列 $\\{q^T x_t\\}$ は発散する。\n\n以下の証明ステップを正しい順序に並び替えよ。',
