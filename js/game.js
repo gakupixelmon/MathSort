@@ -897,36 +897,12 @@ const GameEngine = (() => {
     const nextBtnLabel = isGiveUp ? '🏠 ホームに戻る' : '▶ 結果を見る';
 
     // 解説セクションのHTML（explanationが存在する場合のみ）
+    // ※ escapeHtml() を使うと $ 内の > < が &gt; &lt; に変換されKaTeXが数式をパースできなくなるため、
+    //   プレースホルダーのみ設置し、モーダル追加後にDOMを直接構築してtextContentで安全にテキストを設定する。
     const exp = problem.explanation;
-      let explanationHtml = '';
-    if (exp) {
-      const pointsHtml = exp.points
-        .map(p => `<li class="explanation-point">${escapeHtml(p)}</li>`)
-        .join('');
-      const complexityHtml = exp.complexity
-        ? `<div class="explanation-complexity">
-            <span class="complexity-item"><span class="complexity-label">時間計算量</span><code class="complexity-value">${escapeHtml(exp.complexity.time)}</code></span>
-            <span class="complexity-item"><span class="complexity-label">空間計算量</span><code class="complexity-value">${escapeHtml(exp.complexity.space)}</code></span>
-           </div>`
-        : '';
-      const tipHtml = exp.tip
-        ? `<div class="explanation-tip"><span class="tip-icon">💡</span><span>${escapeHtml(exp.tip)}</span></div>`
-        : '';
-      explanationHtml = `
-        <div class="solution-explanation-section" style="border:none; height:100%; overflow-y:auto; padding-bottom:32px;">
-          <p class="explanation-summary">${escapeHtml(exp.summary)}</p>
-          <ul class="explanation-points">${pointsHtml}</ul>
-          ${complexityHtml}
-          ${tipHtml}
-        </div>
-      `;
-    } else {
-      explanationHtml = `
-        <div class="solution-explanation-section" style="border:none; height:100%; overflow-y:auto; display:flex; align-items:center; justify-content:center; color:var(--text-muted);">
-          <p>この問題には解説がありません</p>
-        </div>
-      `;
-    }
+    const explanationHtml = exp
+      ? `<div id="solution-explanation-root" class="solution-explanation-section" style="border:none; height:100%; overflow-y:auto; padding-bottom:32px;"></div>`
+      : `<div class="solution-explanation-section" style="border:none; height:100%; overflow-y:auto; display:flex; align-items:center; justify-content:center; color:var(--text-muted);"><p>この問題には解説がありません</p></div>`;
 
     const modal = document.createElement('div');
     modal.id = 'solution-modal';
@@ -978,6 +954,75 @@ const GameEngine = (() => {
     `;
 
     document.body.appendChild(modal);
+
+    // 解説セクションをDOMで直接構築（textContentで安全にテキストを設定→KaTeXが数式をパースできる）
+    if (exp) {
+      const expRoot = document.getElementById('solution-explanation-root');
+      if (expRoot) {
+        // サマリー
+        const summaryEl = document.createElement('p');
+        summaryEl.className = 'explanation-summary';
+        summaryEl.textContent = exp.summary;
+        expRoot.appendChild(summaryEl);
+
+        // ポイントリスト
+        const ul = document.createElement('ul');
+        ul.className = 'explanation-points';
+        (exp.points || []).forEach((p) => {
+          const li = document.createElement('li');
+          li.className = 'explanation-point';
+          li.textContent = p;
+          ul.appendChild(li);
+        });
+        expRoot.appendChild(ul);
+
+        // 計算量
+        if (exp.complexity) {
+          const complexDiv = document.createElement('div');
+          complexDiv.className = 'explanation-complexity';
+
+          const timeSpan = document.createElement('span');
+          timeSpan.className = 'complexity-item';
+          const timeLabel = document.createElement('span');
+          timeLabel.className = 'complexity-label';
+          timeLabel.textContent = '時間計算量';
+          const timeVal = document.createElement('code');
+          timeVal.className = 'complexity-value';
+          timeVal.textContent = exp.complexity.time;
+          timeSpan.appendChild(timeLabel);
+          timeSpan.appendChild(timeVal);
+
+          const spaceSpan = document.createElement('span');
+          spaceSpan.className = 'complexity-item';
+          const spaceLabel = document.createElement('span');
+          spaceLabel.className = 'complexity-label';
+          spaceLabel.textContent = '空間計算量';
+          const spaceVal = document.createElement('code');
+          spaceVal.className = 'complexity-value';
+          spaceVal.textContent = exp.complexity.space;
+          spaceSpan.appendChild(spaceLabel);
+          spaceSpan.appendChild(spaceVal);
+
+          complexDiv.appendChild(timeSpan);
+          complexDiv.appendChild(spaceSpan);
+          expRoot.appendChild(complexDiv);
+        }
+
+        // ティップ
+        if (exp.tip) {
+          const tipDiv = document.createElement('div');
+          tipDiv.className = 'explanation-tip';
+          const tipIcon = document.createElement('span');
+          tipIcon.className = 'tip-icon';
+          tipIcon.textContent = '💡';
+          const tipText = document.createElement('span');
+          tipText.textContent = exp.tip;
+          tipDiv.appendChild(tipIcon);
+          tipDiv.appendChild(tipText);
+          expRoot.appendChild(tipDiv);
+        }
+      }
+    }
 
     // スライダーのタブとドットの連動ロジック
     const sliderEl = document.getElementById('solution-slider');
