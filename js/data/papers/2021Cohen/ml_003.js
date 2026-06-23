@@ -8,7 +8,7 @@
   categoryLabel: '論文 / 2021Cohen',
   difficulty: 4,
   language: 'proof',
-  description: '【Theorem 2（Cohen et al., 2022 — Edge of Stability）】\n二次目的関数 $f(x) = \\frac{1}{2}x^T Ax + b^T x + c$ に対し，ステップ幅 $\\eta > 0$，モメンタム係数 $0 \\leq \\beta < 1$ の Polyak（Heavy Ball）モメンタム法\n$$v_{t+1} = \\beta v_t - \\eta \\nabla f(x_t), \\quad x_{t+1} = x_t + v_{t+1}$$\nを任意の初期点から実行する。\n$(q, a)$ を $A$ の固有ベクトル・固有値ペアとするとき，\n$$a > \\frac{1}{\\eta}(2 + 2\\beta)$$\nならば，数列 $\\{q^T x_t\\}$ は発散する。\n\n以下の証明ステップを正しい順序に並び替えよ。',
+  description: '【Theorem 2（Cohen et al., 2021 — Edge of Stability）】\n二次目的関数 $f(x) = \\frac{1}{2}x^T Ax + b^T x + c$ に対し，ステップ幅 $\\eta > 0$，モメンタム係数 $0 \\leq \\beta < 1$ の Polyak（Heavy Ball）モメンタム法\n$$v_{t+1} = \\beta v_t - \\eta \\nabla f(x_t), \\quad x_{t+1} = x_t + v_{t+1}$$\nを任意の初期点から実行する。\n$(q, a)$ を $A$ の固有ベクトル・固有値ペアとするとき，\n$$a > \\frac{1}{\\eta}(2 + 2\\beta)$$\nならば，数列 $\\{q^T x_t\\}$ は発散する。\n\n以下の証明ステップを正しい順序に並び替えよ。',
   pinnedCode: [
     '【証明】',
   ],
@@ -52,6 +52,7 @@
   ],
   explanation: {
     summary: 'Polyak（Heavy Ball）モメンタムの最大安定シャープネスは $\\mathrm{MSS}_{\\text{Polyak}}(\\eta,\\beta) = \\frac{2+2\\beta}{\\eta}$ です。$\\beta = 0$ で vanilla GD の閾値 $2/\\eta$ に一致し，$\\beta$ が大きいほど MSS が増加します。Nesterov モメンタムの MSS より常に大きいため，Polyak の方が安定です。',
+    idea: 'Nesterovモメンタムと同様に、Polyakモメンタムの安定性も2階差分方程式の特性根を調べることで解析できます。この2つのモメンタム法の違いは「勾配をどの点で評価するか」だけですが、特性方程式に落とし込むことで、その僅かな違いが最大安定シャープネス（MSS）に明確な数式の差として現れることをエレガントに示しています。',
     points: [
       '$v_t = x_t - x_{t-1}$ の代入で1階ベクトル漸化式を2階スカラー漸化式に変換する点は Theorem 1 と同様',
       'Nesterov との違い: 勾配を評価する点が $x_t + \\beta v_t$（Nesterov）か $x_t$（Polyak）かで異なる',

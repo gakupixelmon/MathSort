@@ -8,7 +8,7 @@
   categoryLabel: '論文 / 2021Cohen',
   difficulty: 4,
   language: 'proof',
-  description: '【Theorem 1（Cohen et al., 2022 — Edge of Stability）】\n二次目的関数 $f(x) = \\frac{1}{2}x^T Ax + b^T x + c$ に対し，ステップ幅 $\\eta > 0$，モメンタム係数 $0 \\leq \\beta < 1$ の Nesterov モメンタム法\n$$v_{t+1} = \\beta v_t - \\eta \\nabla f(x_t + \\beta v_t), \\quad x_{t+1} = x_t + v_{t+1}$$\nを任意の初期点から実行する（$v_0 = 0$）。\n$(q, a)$ を $A$ の固有ベクトル・固有値ペアとするとき，\n$$a > \\frac{1}{\\eta}\\left(\\frac{2 + 2\\beta}{1 + 2\\beta}\\right)$$\nならば，数列 $\\{q^T x_t\\}$ は発散する。\n\n以下の証明ステップを正しい順序に並び替えよ。',
+  description: '【Theorem 1（Cohen et al., 2021 — Edge of Stability）】\n二次目的関数 $f(x) = \\frac{1}{2}x^T Ax + b^T x + c$ に対し，ステップ幅 $\\eta > 0$，モメンタム係数 $0 \\leq \\beta < 1$ の Nesterov モメンタム法\n$$v_{t+1} = \\beta v_t - \\eta \\nabla f(x_t + \\beta v_t), \\quad x_{t+1} = x_t + v_{t+1}$$\nを任意の初期点から実行する（$v_0 = 0$）。\n$(q, a)$ を $A$ の固有ベクトル・固有値ペアとするとき，\n$$a > \\frac{1}{\\eta}\\left(\\frac{2 + 2\\beta}{1 + 2\\beta}\\right)$$\nならば，数列 $\\{q^T x_t\\}$ は発散する。\n\n以下の証明ステップを正しい順序に並び替えよ。',
   pinnedCode: [
     '【証明】',
   ],
@@ -57,6 +57,7 @@
   ],
   explanation: {
     summary: 'Nesterov モメンタムの最大安定シャープネス（MSS）は $\\mathrm{MSS}_{\\text{Nesterov}}(\\eta, \\beta) = \\frac{1}{\\eta}\\cdot\\frac{2+2\\beta}{1+2\\beta}$ です。$\\beta = 0$ で vanilla GD の閾値 $2/\\eta$ に一致し，$\\beta \\to 1$ では $\\frac{2}{\\eta}$に近づきます（モメンタム増加でMSSは $2/\\eta$ から $2/(2\\eta)=1/\\eta$ に減少）。',
+    idea: 'vanilla GDの安定性閾値が確定した後、実用上で広く使われるモメンタム手法が安定性にどう影響するかを調べるのは自然な流れです。発想の鍵は、速度変数 $v_t$ を消去して $x_t$ と $x_{t-1}$ のみの漸化式にし、それを固有方向に射影することで「2階の線形差分方程式」に帰着させた点です。これにより、特性方程式の根の配置（Elaydiの定理）という確立された数学的ツールを用いて、発散条件を機械的に導き出せるようになります。',
     points: [
       '$v_t = x_t - x_{t-1}$ の代入で1階ベクトル漸化式を2階スカラー漸化式に変換する',
       '固有方向への射影により，高次元問題が1次元の差分方程式に帰着する',
