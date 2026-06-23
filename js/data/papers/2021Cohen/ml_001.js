@@ -8,7 +8,7 @@
   categoryLabel: '論文 / 2021Cohen',
   difficulty: 3,
   language: 'proof',
-  description: '【Proposition 1（Cohen et al., 2022 — Edge of Stability）】\n対称正定値行列 $A \\in \\mathbb{R}^{d \\times d}$，ベクトル $b \\in \\mathbb{R}^d$，スカラー $c \\in \\mathbb{R}$ による二次目的関数\n$$f(x) = \\frac{1}{2} x^T A x + b^T x + c$$\nに対し，ステップ幅 $\\eta > 0$ の勾配降下法\n$$x_{t+1} = x_t - \\eta \\nabla f(x_t)$$\nを任意の初期点 $x_0$ から実行する。\n$(q, a)$ を $A$ の固有ベクトル・固有値ペアとする。\n$$a > \\frac{2}{\\eta}$$\nならば，数列 $\\{q^T x_t\\}$ は発散する。\n\n以下の証明ステップを正しい順序に並び替えよ。',
+  description: '【Proposition 1（Cohen et al., 2021 — Edge of Stability）】\n対称正定値行列 $A \\in \\mathbb{R}^{d \\times d}$，ベクトル $b \\in \\mathbb{R}^d$，スカラー $c \\in \\mathbb{R}$ による二次目的関数\n$$f(x) = \\frac{1}{2} x^T A x + b^T x + c$$\nに対し，ステップ幅 $\\eta > 0$ の勾配降下法\n$$x_{t+1} = x_t - \\eta \\nabla f(x_t)$$\nを任意の初期点 $x_0$ から実行する。\n$(q, a)$ を $A$ の固有ベクトル・固有値ペアとする。\n$$a > \\frac{2}{\\eta}$$\nならば，数列 $\\{q^T x_t\\}$ は発散する。\n\n以下の証明ステップを正しい順序に並び替えよ。',
   pinnedCode: [
     '【証明】',
   ],
@@ -65,6 +65,7 @@
   ],
   explanation: {
     summary: 'ステップ幅 $\\eta$ の勾配降下法が二次関数上で発散する必要十分条件は，ヘッセ行列の最大固有値（シャープネス）が $2/\\eta$ を超えることです。この命題は "Edge of Stability" 論文の基礎となる安定性解析の核心です。',
+    idea: 'ニューラルネットワークの学習で「シャープネスが $2/\\eta$ を超えても学習が進む」という直観に反する現象（Edge of Stability）を浮き彫りにするためには、まず「純粋な二次関数の場合は $2/\\eta$ で完全に発散する」ことを数学的に確定させる必要がありました。行列の更新式を各固有ベクトル方向に射影し、独立した等比数列に分解するというアプローチは、線形システムの安定性解析における最も標準的で強力な発想です。',
     points: [
       '更新則 $x_{t+1} = (I-\\eta A)x_t - \\eta b$ は各固有ベクトル方向に独立に作用する',
       '固有方向 $q$ への射影 $q^T x_t$ は公比 $(1-\\eta a)$ の等比数列になる',
