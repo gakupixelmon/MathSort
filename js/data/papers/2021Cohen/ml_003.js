@@ -59,7 +59,7 @@
       '2階差分方程式の係数が $c_1 = 1+\\beta-\\eta a$，$c_2 = -\\beta$ となり，発散条件は $a > \\frac{2+2\\beta}{\\eta}$',
       'Polyak は Nesterov よりMSSが大きい（安定しやすい）が，一般に収束速度は Nesterov の方が速い',
     ],
-    complexity: { time: '線形代数・差分方程式論', space: '最適化アルゴリズムの基礎知識' },
+    complexity: { time: '線形代数（固有値），2階線形差分方程式論', space: '導出した2階差分方程式の係数から発散条件 $a>\\frac{2+2\\beta}{\\eta}$ を読み取る論証' },
     tip: '論文では式 (1) として $\\mathrm{MSS}_{\\text{Polyak}} = \\frac{2+2\\beta}{\\eta}$，$\\mathrm{MSS}_{\\text{Nesterov}} = \\frac{1}{\\eta}\\cdot\\frac{2+2\\beta}{1+2\\beta}$ がまとめられています。これらは "Edge of Stability" 現象の理論的基盤となり，ニューラルネットワーク訓練においてシャープネスが $2/\\eta$ 付近に留まる理由を解釈する鍵となります。',
   },
 });

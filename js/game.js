@@ -976,7 +976,7 @@ const GameEngine = (() => {
         });
         expRoot.appendChild(ul);
 
-        // 計算量
+        // 前提知識・証明の核心
         if (exp.complexity) {
           const complexDiv = document.createElement('div');
           complexDiv.className = 'explanation-complexity';
@@ -985,7 +985,7 @@ const GameEngine = (() => {
           timeSpan.className = 'complexity-item';
           const timeLabel = document.createElement('span');
           timeLabel.className = 'complexity-label';
-          timeLabel.textContent = '時間計算量';
+          timeLabel.textContent = '前提知識';
           const timeVal = document.createElement('code');
           timeVal.className = 'complexity-value';
           timeVal.textContent = exp.complexity.time;
@@ -996,7 +996,7 @@ const GameEngine = (() => {
           spaceSpan.className = 'complexity-item';
           const spaceLabel = document.createElement('span');
           spaceLabel.className = 'complexity-label';
-          spaceLabel.textContent = '空間計算量';
+          spaceLabel.textContent = '証明の核心';
           const spaceVal = document.createElement('code');
           spaceVal.className = 'complexity-value';
           spaceVal.textContent = exp.complexity.space;
