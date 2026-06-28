@@ -48,6 +48,16 @@ const CATEGORIES = window.CATEGORIES = [
     paperTitle: 'Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability',
     paperAuthors: 'Cohen et al. (ICLR 2022)',
   },
+  {
+    id: 'papers_2025Liu',
+    label: '論文 / 2025Liu',
+    icon: '📄',
+    color: '#f472b6',
+    available: true,
+    randomEligible: true,
+    paperTitle: 'A Minimalist Example of Edge-of-Stability and Progressive Sharpening',
+    paperAuthors: 'Liu et al. (2025)',
+  },
 ];
 
 // ── DataManager ───────────────────────────────────────────
