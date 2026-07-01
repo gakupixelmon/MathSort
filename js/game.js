@@ -32,6 +32,9 @@ function renderMathIn(el) {
         { left: '$$', right: '$$', display: true },
         { left: '$', right: '$', display: false },
       ],
+      // 解説や正解証明は <code>/<pre> 内にも数式を含む。
+      // auto-render の既定ではこれらが無視されるため、証明テキストでは対象に含める。
+      ignoredTags: ['script', 'noscript', 'style', 'textarea', 'option'],
       throwOnError: false,
     });
   }
@@ -1158,6 +1161,7 @@ const GameEngine = (() => {
     if (!hintText || viewingHintIndex < 0) return;
     const hint = currentProblem.hints[viewingHintIndex];
     hintText.textContent = `💡 ヒント ${viewingHintIndex + 1}: ${hint}`;
+    renderMathIn(hintText);
     hintText.classList.add('has-hint', 'hint-appear');
     setTimeout(() => hintText.classList.remove('hint-appear'), 400);
   }
