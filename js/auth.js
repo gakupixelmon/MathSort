@@ -25,6 +25,8 @@ const AuthManager = (() => {
             _githubLogin = data.githubLogin || null;
             if (window.Storage && Storage.syncFromFirebase) {
               Storage.syncFromFirebase(data);
+              // 同期直後に現在の進捗を再度Firebaseに書き込み（マージ結果を反映）
+              syncProgressToFirebase();
             }
           }
         } catch (_e) { /* 読み取り失敗は無視 */ }
@@ -107,6 +109,41 @@ const AuthManager = (() => {
     });
   }
 
+  // ─── 進捗をFirebaseに同期 ─────────────────────────────────
+  async function syncProgressToFirebase() {
+    if (!window.FIREBASE_ENABLED || !_currentUser || !window.db || !window.Storage) return;
+    try {
+      const streakData = window.Storage.getStreak();
+      const totalClears = window.Storage.getTotalSolved();
+      let clearedMap = {};
+      try {
+        const val = localStorage.getItem('algosort_cleared');
+        if (val) clearedMap = JSON.parse(val);
+      } catch (e) {}
+      const clearedIds = Object.keys(clearedMap);
+
+      // dailyActivity を構築
+      const dailyActivity = {};
+      Object.values(clearedMap).forEach(info => {
+        if (info.clearedAt) {
+          dailyActivity[info.clearedAt] = (dailyActivity[info.clearedAt] || 0) + 1;
+        }
+      });
+
+      await window.db.collection('publicProfiles').doc(_currentUser.uid).set({
+        currentStreak: streakData.current || 0,
+        maxStreak: streakData.max || 0,
+        lastPlayed: streakData.lastPlayed || null,
+        totalClears: totalClears || 0,
+        clearedIds: clearedIds,
+        dailyActivity: dailyActivity
+      }, { merge: true });
+      console.info('[Auth] Progress synced to Firebase');
+    } catch (e) {
+      console.warn('[Auth] Failed to sync progress:', e);
+    }
+  }
+
   // ─── 現在のユーザー取得 ───────────────────────────────────
   function getCurrentUser()  { return _currentUser; }
   function getGitHubLogin()  { return _githubLogin; }
@@ -132,7 +169,7 @@ const AuthManager = (() => {
     }
   }
 
-  return { init, signInWithGitHub, signOut, getCurrentUser, getGitHubLogin };
+  return { init, signInWithGitHub, signOut, getCurrentUser, getGitHubLogin, syncProgressToFirebase };
 })();
 
 window.AuthManager = AuthManager;

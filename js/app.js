@@ -378,7 +378,10 @@ const App = (() => {
       (result) => {
         const newStreak = Storage.recordClear(problem.id);
         // Firebase が有効ならクリアを記録
-        if (window.FIREBASE_ENABLED && window.CommunityStats) CommunityStats.recordClear(problem.id);
+        if (window.FIREBASE_ENABLED) {
+          if (window.CommunityStats) CommunityStats.recordClear(problem.id);
+          if (window.AuthManager) window.AuthManager.syncProgressToFirebase();
+        }
         navigateTo('result', {
           problemId: problem.id,
           score: result.score,
