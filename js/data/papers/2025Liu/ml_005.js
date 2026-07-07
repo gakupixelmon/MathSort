@@ -7,7 +7,7 @@
   categoryLabel: '論文 / 2025Liu',
   difficulty: 4,
   language: 'proof',
-  description: '【Theorem 4.4 (Edge of Stability) の直感的な証明】\nLiuらの2次元ミニマリストモデルでは、シャープネス（最大曲率）が $S(\\theta) \\approx \\lambda_1 \\alpha^2$ で近似される。\nパラメータ $\\alpha$ の勾配は $\\frac{\\partial L}{\\partial \\alpha} = \\lambda_1 \\alpha \\beta_1^2 - \\lambda_2 \\beta_2(1-\\alpha\\beta_2)$ となる。\n\n学習率 $\\eta$ の勾配降下法において、シャープネスが増加して限界（$2/\\eta$）を突破した後、どのようにして再び安定領域に戻るのか（自己安定化）、そのメカニズムを示す以下のステップを正しい順序に並び替えよ。',
+  description: '【Theorem 4.4 (Edge of Stability) の直感的な証明】\nLiuらの2次元ミニマリストモデル（モデル出力 $f(x) = \\alpha \\beta_1 x_1 + \\alpha \\beta_2 x_2$ であり、$\\alpha$ は第2層の重み、$\\beta_1, \\beta_2$ はそれぞれノイズと真の特徴に対する第1層の重み）では、シャープネス（最大曲率）が $S(\\theta) \\approx \\lambda_1 \\alpha^2$ で近似される。\nパラメータ $\\alpha$ の勾配は $\\frac{\\partial L}{\\partial \\alpha} = \\lambda_1 \\alpha \\beta_1^2 - \\lambda_2 \\beta_2(1-\\alpha\\beta_2)$ となる。\n\n学習率 $\\eta$ の勾配降下法において、シャープネスが増加して限界（$2/\\eta$）を突破した後、どのようにして再び安定領域に戻るのか（自己安定化）、そのメカニズムを示す以下のステップを正しい順序に並び替えよ。',
   pinnedCode: [
     '【証明】',
   ],

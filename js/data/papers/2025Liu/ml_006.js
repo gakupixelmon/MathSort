@@ -7,7 +7,7 @@
   categoryLabel: '論文 / 2025Liu',
   difficulty: 4,
   language: 'proof',
-  description: '【Theorem 4.6 (Loss Decay Rate) の直感的な証明】\nLiuらの2次元ミニマリストモデルにおいて、損失関数は以下の2つの項に分解できる。\n$L(\\theta) = L_1 + L_2 = \\frac{1}{2}\\lambda_1(\\alpha\\beta_1)^2 + \\frac{1}{2}\\lambda_2(1-\\alpha\\beta_2)^2$\n\nEoSフェーズにおいて、損失関数が非単調なスパイク（一時的な上昇）を伴いながらも、全体としては最適解に向かって指数関数的（最適化分野の用語でいう「線形収束」）に減少していくメカニズムを示す以下のステップを正しい順序に並び替えよ。',
+  description: '【Theorem 4.6 (Loss Decay Rate) の直感的な証明】\nLiuらの2次元ミニマリストモデル（モデル出力 $f(x) = \\alpha \\beta_1 x_1 + \\alpha \\beta_2 x_2$ であり、$\\alpha$ は第2層の重み、$\\beta_1, \\beta_2$ はそれぞれノイズと真の特徴に対する第1層の重み）において、損失関数は以下の2つの項に分解できる。\n$L(\\theta) = L_1 + L_2 = \\frac{1}{2}\\lambda_1(\\alpha\\beta_1)^2 + \\frac{1}{2}\\lambda_2(1-\\alpha\\beta_2)^2$\n\nEoSフェーズにおいて、損失関数が非単調なスパイク（一時的な上昇）を伴いながらも、全体としては最適解に向かって指数関数的（最適化分野の用語でいう「線形収束」）に減少していくメカニズムを示す以下のステップを正しい順序に並び替えよ。',
   pinnedCode: [
     '【証明】',
   ],
