@@ -96,6 +96,10 @@
   - `stat_001.js` (不偏分散の不偏性の証明)
   - `stat_002.js` (弱大数の法則の証明)
   - `stat_003.js` (中心極限定理の証明 ★4, 特性関数による方針)
+- **複素関数**
+  - `complex_001.js` (Cauchy-Riemann 方程式の必要性 ★2)
+  - `complex_002.js` (Liouville の定理 ★3)
+  - `complex_003.js` (留数定理 ★4)
 - **機械学習 (論文)**
   - `2021Cohen/ml_001.js` (二次関数上の勾配降下法の発散条件)
   - `2021Cohen/ml_002.js` (勾配降下法が Edge of Stability で安定化するメカニズム)
@@ -151,6 +155,7 @@
 - 2021Cohenの問題（Edge of Stabilityの基礎）に「なぜその発想が思いつくのか」の解説（idea）を追加。
 - 2025Liuの問題（Edge of Stabilityのミニマリストモデル）の追加と解説の充実化。
 - `stat_003.js`（中心極限定理の証明、特性関数による方針、★4）を追加。
+- 複素関数の証明問題を3問追加（Cauchy-Riemann 方程式の必要性、Liouville の定理、留数定理）。
 
 ---
 
