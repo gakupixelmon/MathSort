@@ -39,6 +39,14 @@ const CATEGORIES = window.CATEGORIES = [
     randomEligible: true,
   },
   {
+    id: 'complex',
+    label: '複素関数',
+    icon: 'ℂ',
+    color: '#34d399',
+    available: true,
+    randomEligible: true,
+  },
+  {
     id: 'papers_2021Cohen',
     label: '論文 / 2021Cohen',
     icon: '📄',
