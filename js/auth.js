@@ -134,6 +134,9 @@ const AuthManager = (() => {
         currentStreak: streakData.current || 0,
         maxStreak: streakData.max || 0,
         lastPlayed: streakData.lastPlayed || null,
+        recoveryTickets: streakData.tickets || 0,
+        ticketProgress: streakData.ticketProgress || 0,
+        catchupProgress: streakData.catchupProgress || 0,
         totalClears: totalClears || 0,
         clearedIds: clearedIds,
         dailyActivity: dailyActivity

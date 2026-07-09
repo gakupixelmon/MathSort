@@ -60,10 +60,22 @@ const App = (() => {
     const streakEl = document.getElementById('streak-count');
     const maxStreakEl = document.getElementById('max-streak');
     const totalEl = document.getElementById('total-solved');
+    const ticketsEl = document.getElementById('recovery-tickets');
+    const ticketProgressEl = document.getElementById('ticket-progress');
+    const catchupProgressEl = document.getElementById('catchup-progress');
+    const todayStatusEl = document.getElementById('today-play-status');
 
     if (streakEl) streakEl.textContent = currentStreak;
     if (maxStreakEl) maxStreakEl.textContent = streak.max;
     if (totalEl) totalEl.textContent = Storage.getTotalSolved();
+    if (ticketsEl) ticketsEl.textContent = streak.tickets;
+    if (ticketProgressEl) ticketProgressEl.textContent = `${streak.ticketProgress}/7`;
+    if (catchupProgressEl) catchupProgressEl.textContent = `${streak.catchupProgress}/15`;
+    if (todayStatusEl) {
+      const playedToday = Storage.hasPlayedToday();
+      todayStatusEl.textContent = playedToday ? '今日プレイ済み' : '今日は未プレイ';
+      todayStatusEl.classList.toggle('played', playedToday);
+    }
 
     const fireEl = document.getElementById('streak-fire');
     if (fireEl) fireEl.style.display = currentStreak > 0 ? 'inline' : 'none';
