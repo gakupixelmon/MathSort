@@ -66,6 +66,16 @@ const CATEGORIES = window.CATEGORIES = [
     paperTitle: 'A Minimalist Example of Edge-of-Stability and Progressive Sharpening',
     paperAuthors: 'Liu et al. (2025)',
   },
+  {
+    id: 'papers_2025Ghosh',
+    label: '論文 / 2025Ghosh',
+    icon: '📄',
+    color: '#22c55e',
+    available: true,
+    randomEligible: true,
+    paperTitle: 'Learning Dynamics of Deep Linear Networks Beyond the Edge of Stability',
+    paperAuthors: 'Ghosh et al. (2025)',
+  },
 ];
 
 // ── DataManager ───────────────────────────────────────────
