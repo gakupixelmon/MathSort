@@ -107,6 +107,9 @@
   - `2025Liu/ml_004.js` (Edge of Stability のミニマリストモデルにおける損失関数の導出とヘッセ行列の性質 - 参考: [[A Minimalist Example]])
   - `2025Liu/ml_005.js` (EoSにおける不安定化と自己安定化のサイクル)
   - `2025Liu/ml_006.js` (Edge of Stability における損失の線形減衰とスパイク現象)
+  - `2025Ghosh/ml_007.js` (DLNにおける特異ベクトル整列と特異値ダイナミクスへの簡約)
+  - `2025Ghosh/ml_008.js` (EOS後の balancing gap の単調減少)
+  - `2025Ghosh/ml_009.js` (DLN beyond EOS における rank-p 2周期部分空間振動 ★5)
 
 ---
 
@@ -156,6 +159,7 @@
 - 2025Liuの問題（Edge of Stabilityのミニマリストモデル）の追加と解説の充実化。
 - `stat_003.js`（中心極限定理の証明、特性関数による方針、★4）を追加。
 - 複素関数の証明問題を3問追加（Cauchy-Riemann 方程式の必要性、Liouville の定理、留数定理）。
+- `Learning Dynamics of Deep Linear Networks Beyond the Edge of Stability` (Ghosh et al., 2025) から論文問題を3問追加。
 
 ---
 
