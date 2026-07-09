@@ -144,6 +144,9 @@ const CommunityStats = (() => {
           currentStreak: streakInfo ? streakInfo.current : 0,
           maxStreak: streakInfo ? streakInfo.max : 0,
           lastPlayed: streakInfo ? streakInfo.lastPlayed : null,
+          recoveryTickets: streakInfo ? streakInfo.tickets : 0,
+          ticketProgress: streakInfo ? streakInfo.ticketProgress : 0,
+          catchupProgress: streakInfo ? streakInfo.catchupProgress : 0,
           displayName: user.displayName || '',
           avatarUrl:   user.photoURL   || '',
         }, { merge: true });
