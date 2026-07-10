@@ -5,14 +5,14 @@
 
 const Storage = (() => {
   const KEYS = {
-    STREAK: 'algosort_streak',
-    LAST_PLAYED: 'algosort_last_played',
-    MAX_STREAK: 'algosort_max_streak',
-    CLEARED: 'algosort_cleared',
-    TOTAL_SOLVED: 'algosort_total_solved',
-    RECOVERY_TICKETS: 'algosort_recovery_tickets',
-    TICKET_PROGRESS: 'algosort_ticket_progress',
-    CATCHUP_PROGRESS: 'algosort_catchup_progress',
+    STREAK: 'mathsort_streak',
+    LAST_PLAYED: 'mathsort_last_played',
+    MAX_STREAK: 'mathsort_max_streak',
+    CLEARED: 'mathsort_cleared',
+    TOTAL_SOLVED: 'mathsort_total_solved',
+    RECOVERY_TICKETS: 'mathsort_recovery_tickets',
+    TICKET_PROGRESS: 'mathsort_ticket_progress',
+    CATCHUP_PROGRESS: 'mathsort_catchup_progress',
   };
 
   function load(key, defaultValue) {
@@ -72,6 +72,9 @@ const Storage = (() => {
 
   // 問題クリア時にストリーク更新
   function recordClear(problemId) {
+    // まず日付チェック（自動救済などの反映）
+    checkStreakValidity();
+
     const today = todayStr();
     const lastPlayed = load(KEYS.LAST_PLAYED, null);
     let streak = load(KEYS.STREAK, 0);
@@ -81,6 +84,7 @@ const Storage = (() => {
     let catchupProgress = load(KEYS.CATCHUP_PROGRESS, 0);
     let streakAdvance = 0;
     const dayGap = lastPlayed ? daysBetween(lastPlayed, today) : null;
+    let bonusTriggered = false;
 
     if (lastPlayed === today) {
       // 今日すでにプレイ済み → ストリークはそのまま
@@ -124,6 +128,7 @@ const Storage = (() => {
           catchupProgress -= 15;
           if (streak < maxStreak) {
             streak += 1;
+            bonusTriggered = true;
           }
         }
       } else {
@@ -148,7 +153,7 @@ const Storage = (() => {
     const total = load(KEYS.TOTAL_SOLVED, 0);
     save(KEYS.TOTAL_SOLVED, total + 1);
 
-    return streak;
+    return { newStreak: streak, bonusTriggered };
   }
 
   function getPrevDay(dateStr) {
@@ -173,16 +178,55 @@ const Storage = (() => {
   // ストリークが今日有効かチェック（日付が変わっていたらリセット）
   function checkStreakValidity() {
     const today = todayStr();
-    const lastPlayed = load(KEYS.LAST_PLAYED, null);
-    const streak = load(KEYS.STREAK, 0);
-    const tickets = load(KEYS.RECOVERY_TICKETS, 0);
-    const dayGap = lastPlayed ? daysBetween(lastPlayed, today) : null;
+    let lastPlayed = load(KEYS.LAST_PLAYED, null);
+    let streak = load(KEYS.STREAK, 0);
+    let tickets = Math.min(load(KEYS.RECOVERY_TICKETS, 0), 1);
+    let catchupProgress = load(KEYS.CATCHUP_PROGRESS, 0);
+    let maxStreak = load(KEYS.MAX_STREAK, 0);
 
     if (!lastPlayed) return 0;
     if (lastPlayed === today) return streak;
     if (lastPlayed === getPrevDay(today)) return streak; // 昨日までは有効
-    if (dayGap === 2 && tickets > 0) return streak; // 復帰チケットで維持可能
-    // それ以上前ならストリークリセット
+
+    // 今日より2日以上前で、チケットがあれば消費して日付を埋める
+    let modified = false;
+    while (tickets > 0 && lastPlayed && lastPlayed < getPrevDay(today)) {
+      const d = parseLocalDate(lastPlayed);
+      d.setDate(d.getDate() + 1);
+      lastPlayed = formatLocalDate(d);
+
+      streak += 1;
+      tickets -= 1;
+
+      if (streak < maxStreak) {
+        catchupProgress += 1;
+        while (catchupProgress >= 15) {
+          catchupProgress -= 15;
+          if (streak < maxStreak) streak += 1;
+        }
+      } else {
+        catchupProgress = 0;
+      }
+
+      modified = true;
+    }
+
+    if (modified) {
+      save(KEYS.LAST_PLAYED, lastPlayed);
+      save(KEYS.STREAK, streak);
+      save(KEYS.RECOVERY_TICKETS, tickets);
+      save(KEYS.CATCHUP_PROGRESS, catchupProgress);
+      if (streak > maxStreak) {
+        maxStreak = streak;
+        save(KEYS.MAX_STREAK, maxStreak);
+      }
+    }
+
+    if (lastPlayed === today || lastPlayed === getPrevDay(today)) {
+      return streak;
+    }
+
+    // それでも届かない場合は途切れる
     save(KEYS.STREAK, 0);
     save(KEYS.TICKET_PROGRESS, 0);
     save(KEYS.CATCHUP_PROGRESS, 0);
