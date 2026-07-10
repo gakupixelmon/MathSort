@@ -54,8 +54,8 @@ const App = (() => {
 
   // ======= ホーム画面 =======
   function renderHome() {
-    const streak = Storage.getStreak();
     const currentStreak = Storage.checkStreakValidity();
+    const streak = Storage.getStreak();
 
     const streakEl = document.getElementById('streak-count');
     const maxStreakEl = document.getElementById('max-streak');
@@ -75,6 +75,7 @@ const App = (() => {
       const playedToday = Storage.hasPlayedToday();
       todayStatusEl.textContent = playedToday ? '今日プレイ済み' : '今日は未プレイ';
       todayStatusEl.classList.toggle('played', playedToday);
+      todayStatusEl.classList.toggle('pending', !playedToday);
     }
 
     const fireEl = document.getElementById('streak-fire');
@@ -388,7 +389,10 @@ const App = (() => {
         giveUpBtn: document.getElementById('give-up-btn'),
       },
       (result) => {
-        const newStreak = Storage.recordClear(problem.id);
+        const clearResult = Storage.recordClear(problem.id);
+        if (clearResult.bonusTriggered) {
+          showFeedback('🎉 最長記録へのキャッチアップボーナス！ストリークがさらに+1されました！', 'success');
+        }
         // Firebase が有効ならクリアを記録
         if (window.FIREBASE_ENABLED) {
           if (window.CommunityStats) CommunityStats.recordClear(problem.id);
@@ -399,7 +403,7 @@ const App = (() => {
           score: result.score,
           hintsUsed: result.hintsUsed,
           elapsed: result.elapsed,
-          streak: newStreak,
+          streak: clearResult.newStreak,
           fromRandom,
           selectedDifficulty: currentSelectedDifficulty,
         });
