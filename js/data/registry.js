@@ -31,14 +31,6 @@ Object.values(PROBLEMS_DB).forEach(arr =>
 window.CATEGORIES = window.CATEGORIES || [];
 const CATEGORIES = window.CATEGORIES = [
   {
-    id: 'statistics',
-    label: '統計学',
-    icon: '📊',
-    color: '#60a5fa',
-    available: true,
-    randomEligible: true,
-  },
-  {
     id: 'complex',
     label: '複素関数',
     icon: 'ℂ',
@@ -47,8 +39,33 @@ const CATEGORIES = window.CATEGORIES = [
     randomEligible: true,
   },
   {
+    id: 'statistics',
+    label: '統計学',
+    icon: '📊',
+    color: '#60a5fa',
+    available: true,
+    randomEligible: true,
+  },
+  {
+    id: 'machine_learning',
+    label: '機械学習',
+    icon: '🧠',
+    color: '#a78bfa',
+    available: true,
+    randomEligible: false,
+  },
+  {
+    id: 'control_engineering',
+    label: '制御工学',
+    icon: '🎛',
+    color: '#38bdf8',
+    available: true,
+    randomEligible: false,
+  },
+  {
     id: 'papers_2021Cohen',
     label: '論文 / 2021Cohen',
+    parentId: 'machine_learning',
     icon: '📄',
     color: '#a78bfa',
     available: true,
@@ -59,6 +76,7 @@ const CATEGORIES = window.CATEGORIES = [
   {
     id: 'papers_2025Liu',
     label: '論文 / 2025Liu',
+    parentId: 'machine_learning',
     icon: '📄',
     color: '#f472b6',
     available: true,
@@ -69,12 +87,31 @@ const CATEGORIES = window.CATEGORIES = [
   {
     id: 'papers_2025Ghosh',
     label: '論文 / 2025Ghosh',
+    parentId: 'machine_learning',
     icon: '📄',
     color: '#22c55e',
     available: true,
     randomEligible: true,
     paperTitle: 'Learning Dynamics of Deep Linear Networks Beyond the Edge of Stability',
     paperAuthors: 'Ghosh et al. (2025)',
+  },
+  {
+    id: 'control_modern',
+    label: '現代制御理論',
+    parentId: 'control_engineering',
+    icon: '📈',
+    color: '#22d3ee',
+    available: true,
+    randomEligible: true,
+  },
+  {
+    id: 'control_classical',
+    label: '古典制御理論',
+    parentId: 'control_engineering',
+    icon: '📉',
+    color: '#f59e0b',
+    available: true,
+    randomEligible: false,
   },
 ];
 
@@ -97,6 +134,29 @@ const DataManager = window.DataManager = (() => {
   // カテゴリで絞り込み
   function getProblemsByCategory(categoryId) {
     return PROBLEMS_DB[categoryId] || [];
+  }
+
+  function getChildCategories(parentId) {
+    return CATEGORIES.filter((c) => (c.parentId || null) === (parentId || null));
+  }
+
+  function getRootCategories() {
+    return getChildCategories(null);
+  }
+
+  function getDescendantCategoryIds(categoryId) {
+    const ids = [];
+    const stack = [categoryId];
+    while (stack.length > 0) {
+      const id = stack.pop();
+      ids.push(id);
+      getChildCategories(id).forEach((child) => stack.push(child.id));
+    }
+    return ids;
+  }
+
+  function getProblemsByCategoryTree(categoryId) {
+    return getDescendantCategoryIds(categoryId).flatMap((id) => getProblemsByCategory(id));
   }
 
   // 難易度で絞り込み（ランダムモード用：randomEligible のものだけ）
@@ -155,6 +215,9 @@ const DataManager = window.DataManager = (() => {
     getRandomProblemByDifficulty,
     getAvailableDifficulties,
     getCategories,
+    getRootCategories,
+    getChildCategories,
+    getProblemsByCategoryTree,
     shuffleBlocks,
   };
 })();
