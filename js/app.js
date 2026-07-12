@@ -44,7 +44,7 @@ const App = (() => {
 
     if (screenId === 'home') renderHome();
     else if (screenId === 'difficulty-select') renderDifficultySelect();
-    else if (screenId === 'categories') renderCategories();
+    else if (screenId === 'categories') renderCategories(params.parentId || null);
     else if (screenId === 'stages') renderStages(params.categoryId);
     else if (screenId === 'game') renderGame(params.problemId, params.fromRandom, params.selectedDifficulty);
     else if (screenId === 'result') renderResult(params);
@@ -152,24 +152,36 @@ const App = (() => {
   }
 
   // ======= カテゴリ選択画面 =======
-  function renderCategories() {
+  function renderCategories(parentId = null) {
     const grid = document.getElementById('category-grid');
     if (!grid) return;
     grid.innerHTML = '';
 
-    const categories = DataManager.getCategories();
+    const categories = DataManager.getChildCategories(parentId);
+    const parent = parentId ? DataManager.getCategories().find((c) => c.id === parentId) : null;
+    const titleEl = document.querySelector('#categories .header-title');
+    if (titleEl) titleEl.textContent = parent ? parent.label : 'カテゴリ';
+
     categories.forEach((cat) => {
-      const problems = DataManager.getProblemsByCategory(cat.id);
+      const children = DataManager.getChildCategories(cat.id);
+      const hasChildren = children.length > 0;
+      const problems = hasChildren
+        ? DataManager.getProblemsByCategoryTree(cat.id)
+        : DataManager.getProblemsByCategory(cat.id);
       const cleared = problems.filter((p) => Storage.isClear(p.id)).length;
+      const isSelectable = cat.available && (hasChildren || problems.length > 0 || !!cat.parentId);
 
       const card = document.createElement('div');
-      card.className = `category-card${cat.available ? '' : ' locked'}`;
+      card.className = `category-card${isSelectable ? '' : ' locked'}`;
       card.style.setProperty('--cat-color', cat.color);
 
       // ランダムモード対象外バッジ
-      const notRandomBadge = (!cat.randomEligible)
+      const notRandomBadge = (!cat.randomEligible && !hasChildren)
         ? '<span class="not-random-badge">ランダム対象外</span>'
         : '';
+      const progressText = cat.available
+        ? (problems.length > 0 ? `${cleared} / ${problems.length} クリア` : 'Coming Soon')
+        : 'Coming Soon';
 
       card.innerHTML = `
         <div class="cat-icon">${cat.icon}</div>
@@ -178,13 +190,16 @@ const App = (() => {
             <span class="cat-label">${cat.label}</span>
             ${notRandomBadge}
           </div>
-          <div class="cat-progress">${cat.available ? `${cleared} / ${problems.length} クリア` : 'Coming Soon'}</div>
+          <div class="cat-progress">${progressText}</div>
         </div>
-        ${cat.available ? '' : '<div class="lock-icon">🔒</div>'}
+        ${isSelectable ? '' : '<div class="lock-icon">🔒</div>'}
       `;
 
-      if (cat.available) {
-        card.addEventListener('click', () => navigateTo('stages', { categoryId: cat.id }));
+      if (isSelectable) {
+        card.addEventListener('click', () => {
+          if (hasChildren) navigateTo('categories', { parentId: cat.id });
+          else navigateTo('stages', { categoryId: cat.id });
+        });
       }
 
       grid.appendChild(card);
@@ -193,7 +208,11 @@ const App = (() => {
     const backBtn = document.getElementById('categories-back');
     if (backBtn) {
       backBtn.replaceWith(backBtn.cloneNode(true));
-      document.getElementById('categories-back').addEventListener('click', () => navigateTo('home'));
+      document.getElementById('categories-back').addEventListener('click', () => {
+        if (parent && parent.parentId) navigateTo('categories', { parentId: parent.parentId });
+        else if (parent) navigateTo('categories');
+        else navigateTo('home');
+      });
     }
   }
 
@@ -208,6 +227,13 @@ const App = (() => {
 
     const titleEl = document.getElementById('stages-title');
     if (titleEl && cat) titleEl.textContent = cat.label;
+
+    if (problems.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'stage-empty';
+      empty.textContent = 'Coming Soon';
+      list.appendChild(empty);
+    }
 
     problems.forEach((problem) => {
       const isCleared = Storage.isClear(problem.id);
@@ -257,7 +283,10 @@ const App = (() => {
     const backBtn = document.getElementById('stages-back');
     if (backBtn) {
       backBtn.replaceWith(backBtn.cloneNode(true));
-      document.getElementById('stages-back').addEventListener('click', () => navigateTo('categories'));
+      document.getElementById('stages-back').addEventListener('click', () => {
+        if (cat && cat.parentId) navigateTo('categories', { parentId: cat.parentId });
+        else navigateTo('categories');
+      });
     }
   }
 
