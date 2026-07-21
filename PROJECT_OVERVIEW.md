@@ -103,6 +103,8 @@
   - `complex_001.js` (Cauchy-Riemann 方程式の必要性 ★2)
   - `complex_002.js` (Liouville の定理 ★3)
   - `complex_003.js` (留数定理 ★4)
+  - `complex_004.js` (べき級数の収束半径の公式 ★4)
+  - `complex_005.js` (主値積分と元の関数の一致 ★5)
 - **制御工学**
   - `modern/ctrl_modern_001.js` (2次線形システムの漸近安定条件 ★3)
   - `modern/ctrl_modern_002.js` (可制御性・可観測性のランク条件 ★4)
@@ -165,6 +167,8 @@
 - 2025Liuの問題（Edge of Stabilityのミニマリストモデル）の追加と解説の充実化。
 - `stat_003.js`（中心極限定理の証明、特性関数による方針、★4）を追加。
 - 複素関数の証明問題を3問追加（Cauchy-Riemann 方程式の必要性、Liouville の定理、留数定理）。
+- `complex_004.js`（べき級数の収束半径の公式、Cauchy-Hadamard の公式、★4）を追加。
+- `complex_005.js`（主値積分による関数の復元公式、★5）を追加。
 - `Learning Dynamics of Deep Linear Networks Beyond the Edge of Stability` (Ghosh et al., 2025) から論文問題を3問追加。
 - ストリークに今日のプレイ状況、復帰チケット、チケット進捗、キャッチアップボーナスを追加。
 - カテゴリ選択を階層化（複素関数・統計学・機械学習・制御工学 → 論文/制御理論サブカテゴリ）し、現代制御理論の証明問題を2問追加。
