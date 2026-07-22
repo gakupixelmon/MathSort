@@ -108,6 +108,7 @@
 - **制御工学**
   - `modern/ctrl_modern_001.js` (2次線形システムの漸近安定条件 ★3)
   - `modern/ctrl_modern_002.js` (可制御性・可観測性のランク条件 ★4)
+  - `modern/ctrl_modern_003.js` (最適レギュレータの導出 ★5)
 - **機械学習 (論文)**
   - `2021Cohen/ml_001.js` (二次関数上の勾配降下法の発散条件)
   - `2021Cohen/ml_002.js` (勾配降下法が Edge of Stability で安定化するメカニズム)
@@ -172,6 +173,7 @@
 - `Learning Dynamics of Deep Linear Networks Beyond the Edge of Stability` (Ghosh et al., 2025) から論文問題を3問追加。
 - ストリークに今日のプレイ状況、復帰チケット、チケット進捗、キャッチアップボーナスを追加。
 - カテゴリ選択を階層化（複素関数・統計学・機械学習・制御工学 → 論文/制御理論サブカテゴリ）し、現代制御理論の証明問題を2問追加。
+- `ctrl_modern_003.js`（連続時間 LQR における最適レギュレータの導出、★5）を追加。
 
 ---
 
