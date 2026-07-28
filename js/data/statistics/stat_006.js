@@ -15,38 +15,47 @@
     {
       id: 0,
       code: '$Y_i=X_i-E[X_i]$ とおくと、$E[Y_i]=0$ かつ $Y_i$ の値域の幅は $b_i-a_i$ である。また $S_n-E[S_n]=\\sum_{i=1}^nY_i$ である。',
+      solutionComment: '$Y_i$ は $X_i$ の定数平行移動なので、値域の幅 $b_i-a_i$ と独立性は変わらない。',
     },
     {
       id: 1,
       code: '$\\lambda>0$ とする。指数関数の単調性と Markov の不等式より、\n$\\displaystyle P\\left(\\sum_{i=1}^nY_i\\geq t\\right)=P\\left(e^{\\lambda\\sum_iY_i}\\geq e^{\\lambda t}\\right)\\leq e^{-\\lambda t}E\\left[e^{\\lambda\\sum_iY_i}\\right]$\nである。',
+      solutionComment: '$Z=e^{\\lambda\\sum_iY_i}\\geq0$ に Markov の不等式 $P(Z\\geq c)\\leq E[Z]/c$ を、$c=e^{\\lambda t}$ として適用。',
     },
     {
       id: 2,
       code: '$Y_i$ は独立なので、指数関数の期待値は積に分解される：\n$\\displaystyle E\\left[e^{\\lambda\\sum_iY_i}\\right]=\\prod_{i=1}^nE[e^{\\lambda Y_i}]$。',
+      solutionComment: '$e^{\\lambda\\sum_iY_i}=\\prod_i e^{\\lambda Y_i}$ と、独立な確率変数の積の期待値の分解を使う。',
     },
     {
       id: 3,
       code: '各 $Y_i$ にホフディングの補題を適用すると、\n$\\displaystyle E[e^{\\lambda Y_i}]\\leq\\exp\\!\\left(\\frac{\\lambda^2(b_i-a_i)^2}{8}\\right)$\nである。',
+      solutionComment: 'ホフディングの補題で、平均 $0$・値域の幅 $d=b_i-a_i$ を代入。',
     },
     {
       id: 4,
       code: '$V=\\sum_{i=1}^n(b_i-a_i)^2$ とおく。以上を合わせると、任意の $\\lambda>0$ について\n$\\displaystyle P(S_n-E[S_n]\\geq t)\\leq\\exp\\!\\left(-\\lambda t+\\frac{\\lambda^2V}{8}\\right)$\nを得る。',
+      solutionComment: '$\\prod_i e^{\\lambda^2(b_i-a_i)^2/8}=e^{\\lambda^2V/8}$ として、積を1つの指数関数にまとめる。',
     },
     {
       id: 5,
       code: '右辺の指数 $-\\lambda t+\\lambda^2V/8$ は、$\\lambda=4t/V$ のとき最小になる。',
+      solutionComment: "$g'(\\lambda)=-t+\\lambda V/4=0$ を解く。$g''(\\lambda)=V/4>0$ なので最小。",
     },
     {
       id: 6,
       code: 'この $\\lambda$ を代入して、\n$\\displaystyle P(S_n-E[S_n]\\geq t)\\leq\\exp\\!\\left(-\\frac{2t^2}{V}\\right)$\nを得る。',
+      solutionComment: '$-\\lambda t+\\lambda^2V/8$ に $\\lambda=4t/V$ を代入すると $-2t^2/V$。',
     },
     {
       id: 7,
       code: '$-Y_i$ も独立で値域の幅は同じだから、同じ議論を $-Y_i$ に適用して\n$\\displaystyle P(S_n-E[S_n]\\leq-t)\\leq\\exp\\!\\left(-\\frac{2t^2}{V}\\right)$\nを得る。',
+      solutionComment: '$\\sum_iY_i\\leq-t$ は $\\sum_i(-Y_i)\\geq t$ と同値。',
     },
     {
       id: 8,
       code: '事象 $\\{|S_n-E[S_n]|\\geq t\\}$ は二つの片側事象の和集合なので、和の法則より\n$\\displaystyle P(|S_n-E[S_n]|\\geq t)\\leq2\\exp\\!\\left(-\\frac{2t^2}{V}\\right)$\nとなる。$\\square$',
+      solutionComment: '和の法則 $P(A\\cup B)\\leq P(A)+P(B)$ を適用。',
     },
   ],
   partialOrder: [
@@ -56,36 +65,6 @@
     'まず中心化した変数 $Y_i=X_i-E[X_i]$ に置き換えると、ホフディングの補題をそのまま使えます。',
     '確率の上界は $e^{\\lambda\\sum_iY_i}$ に Markov の不等式を適用して作ります。',
     '独立性で積率母関数を積に分け、最後に $\\lambda$ を最適化します。',
-  ],
-  solutionNotes: [
-    {
-      title: '中心化しても値域の幅は変わらない',
-      text: '$Y_i=X_i-E[X_i]$ は $X_i$ を定数だけ平行移動したものです。したがって $Y_i$ の取り得る値の上端と下端の差は、元と同じ $b_i-a_i$ です。',
-    },
-    {
-      title: '指数型 Markov 不等式',
-      text: '$Z=e^{\\lambda\\sum_iY_i}\\geq0$ とおくと、Markov の不等式 $P(Z\\geq c)\\leq E[Z]/c$ に $c=e^{\\lambda t}$ を代入しています。$\\lambda>0$ なので、$\\sum_iY_i\\geq t$ と $Z\\geq e^{\\lambda t}$ は同値です。',
-    },
-    {
-      title: '独立性による積率母関数の分解',
-      text: '$e^{\\lambda\\sum_iY_i}=\\prod_i e^{\\lambda Y_i}$ です。$Y_i$ は $X_i$ の定数平行移動なので独立性を保ち、独立な確率変数の積の期待値は期待値の積に分解できます。',
-    },
-    {
-      title: 'ホフディングの補題の適用',
-      text: '補題は平均 $0$ で値域の幅が $d$ の確率変数に対し $E[e^{\\lambda Y}]\\leq e^{\\lambda^2d^2/8}$ を与えます。ここでは $d=b_i-a_i$ を代入しています。',
-    },
-    {
-      title: '積を指数関数1つにまとめる',
-      text: '$\\prod_i\\exp(\\lambda^2(b_i-a_i)^2/8)=\\exp(\\lambda^2\\sum_i(b_i-a_i)^2/8)$ です。これにより、各変数の情報は $V=\\sum_i(b_i-a_i)^2$ だけに集約されます。',
-    },
-    {
-      title: '$\\lambda$ の最適化',
-      text: "$g(\\lambda)=-\\lambda t+\\lambda^2V/8$ とおくと、$g'(\\lambda)=-t+\\lambda V/4$ です。$g'(\\lambda)=0$ から $\\lambda=4t/V$ を得て、$g''(\\lambda)=V/4>0$ より最小値だと分かります。",
-    },
-    {
-      title: '両側評価への拡張',
-      text: '下側事象は $\\sum_iY_i\\leq-t$、すなわち $\\sum_i(-Y_i)\\geq t$ と書き換えられます。最後に $\\{|Z|\\geq t\\}=\\{Z\\geq t\\}\\cup\\{Z\\leq-t\\}$ として和の法則を用います。',
-    },
   ],
   explanation: {
     summary: 'ホフディングの不等式は、独立で有界な確率変数の和が平均から大きく外れる確率が、偏差の二乗に対して指数的に小さくなることを示します。',
