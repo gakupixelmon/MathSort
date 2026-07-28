@@ -7,19 +7,8 @@
  * 3. Firestore Database を作成（リージョン: asia-northeast1 推奨）
  * 4. プロジェクト設定 → ウェブアプリ追加 → 下記の設定値を貼り付け
  *
- * !! Firestore セキュリティルール !!
- * rules_version = '2';
- * service cloud.firestore {
- *   match /databases/{database}/documents {
- *     match /problemStats/{problemId} {
- *       allow read: if true;
- *       allow write: if request.auth != null;
- *     }
- *     match /userStats/{uid} {
- *       allow read, write: if request.auth != null && request.auth.uid == uid;
- *     }
- *   }
- * }
+ * Firestore セキュリティルールはリポジトリ直下の firestore.rules を使用する。
+ * 変更後は `firebase deploy --only firestore:rules` で反映する。
  */
 
 const FIREBASE_CONFIG = {
