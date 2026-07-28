@@ -1581,8 +1581,16 @@
 
 .solution-line-code {
   color: #e2e8f0;
-  white-space: pre;
+  white-space: pre-wrap;
   padding-right: var(--space-md);
+}
+
+.solution-line-comment {
+  color: var(--accent-cyan);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 11px;
+  font-style: italic;
+  line-height: 1.5;
 }
 
 .solution-line:hover { background: rgba(124,58,237,0.08); }
@@ -1625,39 +1633,6 @@
   content: '📌';
   font-size: 9px;
   margin-right: 2px;
-}
-
-/* ===== ソリューションモーダル：証明の補足 ===== */
-.solution-notes {
-  margin: var(--space-lg) var(--space-md) 0;
-  padding-top: var(--space-md);
-  border-top: 1px solid var(--border);
-}
-
-.solution-notes-title {
-  margin: 0 0 var(--space-sm);
-  font-size: 14px;
-  color: var(--accent-cyan);
-}
-
-.solution-note {
-  margin-bottom: var(--space-sm);
-  padding: var(--space-sm) var(--space-md);
-  border-left: 2px solid var(--accent-purple);
-  background: rgba(124, 58, 237, 0.06);
-}
-
-.solution-note-title {
-  margin: 0 0 4px;
-  font-size: 12px;
-  color: var(--text-primary);
-}
-
-.solution-note-text {
-  margin: 0;
-  font-size: 12px;
-  line-height: 1.6;
-  color: var(--text-secondary);
 }
 
 /* ===== ソリューションモーダル：解説セクション ===== */
