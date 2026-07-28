@@ -940,6 +940,7 @@ const GameEngine = (() => {
               </div>
               <div class="solution-code-wrapper" style="flex:1; overflow-y:auto; padding-bottom:32px;">
                 <pre class="solution-pre"><code id="solution-code-content"></code></pre>
+                <div id="solution-notes-content"></div>
               </div>
             </div>
           </div>
@@ -1093,6 +1094,37 @@ const GameEngine = (() => {
       lineEl.appendChild(lineCode);
       codeEl.appendChild(lineEl);
     });
+
+    // 正解の証明にのみ、式変形や使用定理の補足を表示する。
+    const notesRoot = document.getElementById('solution-notes-content');
+    if (notesRoot && problem.solutionNotes && problem.solutionNotes.length > 0) {
+      const notesSection = document.createElement('section');
+      notesSection.className = 'solution-notes';
+
+      const notesTitle = document.createElement('h3');
+      notesTitle.className = 'solution-notes-title';
+      notesTitle.textContent = '補足';
+      notesSection.appendChild(notesTitle);
+
+      problem.solutionNotes.forEach((note) => {
+        const noteEl = document.createElement('div');
+        noteEl.className = 'solution-note';
+
+        const titleEl = document.createElement('h4');
+        titleEl.className = 'solution-note-title';
+        titleEl.textContent = note.title;
+
+        const textEl = document.createElement('p');
+        textEl.className = 'solution-note-text';
+        textEl.textContent = note.text;
+
+        noteEl.appendChild(titleEl);
+        noteEl.appendChild(textEl);
+        notesSection.appendChild(noteEl);
+      });
+
+      notesRoot.appendChild(notesSection);
+    }
 
     requestAnimationFrame(() => {
       modal.classList.add('visible');

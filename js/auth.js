@@ -8,28 +8,47 @@
 const AuthManager = (() => {
   let _currentUser  = null;
   let _githubLogin  = null; // GitHub ユーザー名（@id形式）
+  let _profileUnsubscribe = null;
 
   // ─── 初期化 ──────────────────────────────────────────────
   function init() {
     if (!window.FIREBASE_ENABLED || !window.firebaseAuth) return;
 
     firebaseAuth.onAuthStateChanged(async (user) => {
+      if (_profileUnsubscribe) {
+        _profileUnsubscribe();
+        _profileUnsubscribe = null;
+      }
       _currentUser = user;
 
       if (user && window.db) {
-        // publicProfiles から githubLogin を読み取る（ページリロード対応）
+        const profileRef = db.collection('publicProfiles').doc(user.uid);
         try {
-          const profileDoc = await db.collection('publicProfiles').doc(user.uid).get();
+          const profileDoc = await profileRef.get();
           if (profileDoc.exists) {
             const data = profileDoc.data();
             _githubLogin = data.githubLogin || null;
             if (window.Storage && Storage.syncFromFirebase) {
               Storage.syncFromFirebase(data);
-              // 同期直後に現在の進捗を再度Firebaseに書き込み（マージ結果を反映）
-              syncProgressToFirebase();
             }
           }
-        } catch (_e) { /* 読み取り失敗は無視 */ }
+          // 初回ログインでも端末の進捗をクラウドに作成する。
+          await syncProgressToFirebase();
+
+          // 他端末でのクリア・ストリーク更新を、再読み込みなしで反映する。
+          _profileUnsubscribe = profileRef.onSnapshot((snapshot) => {
+            if (!_currentUser || _currentUser.uid !== user.uid || !snapshot.exists) return;
+            const data = snapshot.data();
+            _githubLogin = data.githubLogin || _githubLogin;
+            if (window.Storage && Storage.syncFromFirebase) Storage.syncFromFirebase(data);
+            _updateUI(_currentUser);
+            if (window.App && App.getCurrentScreen && App.getCurrentScreen() === 'home') App.renderHome();
+          }, (error) => {
+            console.warn('[Auth] Failed to listen for progress updates:', error);
+          });
+        } catch (e) {
+          console.warn('[Auth] Failed to load progress:', e);
+        }
       } else {
         _githubLogin = null;
       }
@@ -101,6 +120,10 @@ const AuthManager = (() => {
   function signOut() {
     if (!window.FIREBASE_ENABLED || !window.firebaseAuth) return;
     firebaseAuth.signOut().then(() => {
+      if (_profileUnsubscribe) {
+        _profileUnsubscribe();
+        _profileUnsubscribe = null;
+      }
       _githubLogin = null;
       // プロフィールURLボタンを隠す
       const container = document.getElementById('profile-link-container');
@@ -117,7 +140,7 @@ const AuthManager = (() => {
       const totalClears = window.Storage.getTotalSolved();
       let clearedMap = {};
       try {
-        const val = localStorage.getItem('algosort_cleared');
+        const val = localStorage.getItem('mathsort_cleared');
         if (val) clearedMap = JSON.parse(val);
       } catch (e) {}
       const clearedIds = Object.keys(clearedMap);
@@ -137,6 +160,7 @@ const AuthManager = (() => {
         recoveryTickets: streakData.tickets || 0,
         ticketProgress: streakData.ticketProgress || 0,
         catchupProgress: streakData.catchupProgress || 0,
+        progressUpdatedAt: streakData.progressUpdatedAt || Date.now(),
         totalClears: totalClears || 0,
         clearedIds: clearedIds,
         dailyActivity: dailyActivity

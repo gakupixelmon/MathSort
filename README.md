@@ -133,6 +133,14 @@ MathSort/
 python3 -m http.server 8000
 ```
 
+## 🔥 Firestore 同期
+
+ストリーク・クリア履歴は、同じ GitHub アカウントでログインした端末間で同期されます。Firestore のルールは [firestore.rules](firestore.rules) にあります。Firebase CLI を設定済みの環境で、変更を反映してください。
+
+```bash
+firebase deploy --only firestore:rules
+```
+
 ---
 
 ## 📝 ライセンス

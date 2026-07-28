@@ -13,6 +13,7 @@ const Storage = (() => {
     RECOVERY_TICKETS: 'mathsort_recovery_tickets',
     TICKET_PROGRESS: 'mathsort_ticket_progress',
     CATCHUP_PROGRESS: 'mathsort_catchup_progress',
+    PROGRESS_UPDATED_AT: 'mathsort_progress_updated_at',
   };
 
   function load(key, defaultValue) {
@@ -67,6 +68,7 @@ const Storage = (() => {
       tickets: load(KEYS.RECOVERY_TICKETS, 0),
       ticketProgress: load(KEYS.TICKET_PROGRESS, 0),
       catchupProgress: load(KEYS.CATCHUP_PROGRESS, 0),
+      progressUpdatedAt: load(KEYS.PROGRESS_UPDATED_AT, 0),
     };
   }
 
@@ -141,6 +143,7 @@ const Storage = (() => {
     save(KEYS.RECOVERY_TICKETS, tickets);
     save(KEYS.TICKET_PROGRESS, ticketProgress);
     save(KEYS.CATCHUP_PROGRESS, catchupProgress);
+    save(KEYS.PROGRESS_UPDATED_AT, Date.now());
 
     if (streak > maxStreak) save(KEYS.MAX_STREAK, streak);
 
@@ -220,6 +223,7 @@ const Storage = (() => {
         maxStreak = streak;
         save(KEYS.MAX_STREAK, maxStreak);
       }
+      save(KEYS.PROGRESS_UPDATED_AT, Date.now());
     }
 
     if (lastPlayed === today || lastPlayed === getPrevDay(today)) {
@@ -230,24 +234,45 @@ const Storage = (() => {
     save(KEYS.STREAK, 0);
     save(KEYS.TICKET_PROGRESS, 0);
     save(KEYS.CATCHUP_PROGRESS, 0);
+    save(KEYS.PROGRESS_UPDATED_AT, Date.now());
     return 0;
   }
 
-  // Firebaseから取得したデータでローカルストレージを同期
+  // Firebase の進捗をローカルに反映する。
+  // より新しい更新時刻を優先し、過去最高ストリークだけは常に大きい方を残す。
   function syncFromFirebase(data) {
-    if (data.currentStreak !== undefined) save(KEYS.STREAK, data.currentStreak);
-    if (data.maxStreak !== undefined) save(KEYS.MAX_STREAK, data.maxStreak);
-    if (data.lastPlayed !== undefined) save(KEYS.LAST_PLAYED, data.lastPlayed);
-    if (data.totalClears !== undefined) save(KEYS.TOTAL_SOLVED, data.totalClears);
-    if (data.recoveryTickets !== undefined) save(KEYS.RECOVERY_TICKETS, Math.min(data.recoveryTickets, 1));
-    if (data.ticketProgress !== undefined) save(KEYS.TICKET_PROGRESS, data.ticketProgress);
-    if (data.catchupProgress !== undefined) save(KEYS.CATCHUP_PROGRESS, data.catchupProgress);
+    const local = getStreak();
+    const remoteUpdatedAt = Number(data.progressUpdatedAt) || 0;
+    const localUpdatedAt = Number(local.progressUpdatedAt) || 0;
+    const remoteLastPlayed = data.lastPlayed || null;
+    const shouldUseRemote = remoteUpdatedAt > localUpdatedAt
+      || (!localUpdatedAt && remoteLastPlayed && (!local.lastPlayed || remoteLastPlayed > local.lastPlayed));
+
+    if (shouldUseRemote) {
+      if (data.currentStreak !== undefined) save(KEYS.STREAK, data.currentStreak);
+      if (data.lastPlayed !== undefined) save(KEYS.LAST_PLAYED, data.lastPlayed);
+      if (data.recoveryTickets !== undefined) save(KEYS.RECOVERY_TICKETS, Math.min(data.recoveryTickets, 1));
+      if (data.ticketProgress !== undefined) save(KEYS.TICKET_PROGRESS, data.ticketProgress);
+      if (data.catchupProgress !== undefined) save(KEYS.CATCHUP_PROGRESS, data.catchupProgress);
+      save(KEYS.PROGRESS_UPDATED_AT, remoteUpdatedAt || Date.now());
+    }
+
+    const remoteMaxStreak = Number(data.maxStreak) || 0;
+    if (remoteMaxStreak > local.max) save(KEYS.MAX_STREAK, remoteMaxStreak);
+    if (data.totalClears !== undefined) {
+      save(KEYS.TOTAL_SOLVED, Math.max(getTotalSolved(), Number(data.totalClears) || 0));
+    }
     if (data.clearedIds && Array.isArray(data.clearedIds)) {
       const cleared = load(KEYS.CLEARED, {});
       data.clearedIds.forEach(id => { cleared[id] = cleared[id] || { clearedAt: todayStr() } });
       save(KEYS.CLEARED, cleared);
     }
+
+    return getStreak();
   }
 
   return { getStreak, recordClear, isClear, getTotalSolved, checkStreakValidity, syncFromFirebase, hasPlayedToday };
 })();
+
+// 認証・コミュニティ機能からも同じストレージを参照できるように公開する。
+window.Storage = Storage;
