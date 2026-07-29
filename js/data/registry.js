@@ -96,6 +96,15 @@ const CATEGORIES = window.CATEGORIES = [
     paperAuthors: 'Ghosh et al. (2025)',
   },
   {
+    id: 'ml_theory',
+    label: '学習理論',
+    parentId: 'machine_learning',
+    icon: '📐',
+    color: '#38bdf8',
+    available: true,
+    randomEligible: true,
+  },
+  {
     id: 'control_modern',
     label: '現代制御理論',
     parentId: 'control_engineering',
