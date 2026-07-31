@@ -128,6 +128,8 @@
 - **機械学習 (学習理論)**
   - `theory/ml_theory_001.js` (ラデマッハ複雑度に基づく汎化境界 ★5)
   - `theory/ml_theory_002.js` (マクディアミッドの不等式 ★5)
+  - `theory/ml_theory_003.js` (Talagrand の収縮補題 ★5)
+  - `theory/ml_theory_004.js` (Vapnik-Chervonenkis の定理 ★5)
 
 ---
 
@@ -181,6 +183,8 @@
 - `stat_007.js`（条件付き期待値の塔の公式、★4）を追加。
 - `stat_008.js`（マルコフの不等式の証明、★2）を追加。
 - 機械学習の「学習理論」サブカテゴリを追加し、ラデマッハ複雑度に基づく汎化境界とマクディアミッドの不等式の証明問題を追加。
+- `ml_theory_003.js`（Talagrand の収縮補題、★5）を追加。
+- `ml_theory_004.js`（VC 不等式と Sauer の補題による Vapnik-Chervonenkis の定理、★5）を追加。
 - 正解の証明画面で、問題ブロックの `solutionComment` を各該当行の末尾に `∵` 注釈として表示できるようにし、`stat_006.js` に式変形・使用定理の補足を追加。
 - 複素関数の証明問題を3問追加（Cauchy-Riemann 方程式の必要性、Liouville の定理、留数定理）。
 - `complex_004.js`（べき級数の収束半径の公式、Cauchy-Hadamard の公式、★4）を追加。
