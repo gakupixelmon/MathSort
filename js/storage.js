@@ -239,14 +239,17 @@ const Storage = (() => {
   }
 
   // Firebase の進捗をローカルに反映する。
-  // より新しい更新時刻を優先し、過去最高ストリークだけは常に大きい方を残す。
+  // クラウドの最終プレイ日がより新しければ必ずクラウドを優先し、
+  // 同日以前なら更新時刻で判定する。過去最高ストリークは常に大きい方を残す。
   function syncFromFirebase(data) {
     const local = getStreak();
     const remoteUpdatedAt = Number(data.progressUpdatedAt) || 0;
     const localUpdatedAt = Number(local.progressUpdatedAt) || 0;
     const remoteLastPlayed = data.lastPlayed || null;
-    const shouldUseRemote = remoteUpdatedAt > localUpdatedAt
-      || (!localUpdatedAt && remoteLastPlayed && (!local.lastPlayed || remoteLastPlayed > local.lastPlayed));
+    const remoteHasNewerLastPlayed = remoteLastPlayed
+      && (!local.lastPlayed || remoteLastPlayed > local.lastPlayed);
+    const shouldUseRemote = remoteHasNewerLastPlayed
+      || remoteUpdatedAt > localUpdatedAt;
 
     if (shouldUseRemote) {
       if (data.currentStreak !== undefined) save(KEYS.STREAK, data.currentStreak);
