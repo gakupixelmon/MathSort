@@ -504,6 +504,18 @@
   color: var(--text-primary);
   line-height: 1.65;
   white-space: pre-wrap; /* \n を改行として表示 */
+  min-width: 0;
+}
+
+/* 長い display 数式はカードの外へ出さず、数式部分だけをスクロール可能にする。 */
+.problem-statement-text .katex-display,
+.block-code .katex-display,
+.solution-line-code .katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
 /* ===== 入力形式カード ===== */
@@ -1302,6 +1314,29 @@
     font-size: 11.5px;
   }
 
+  /* 改行不能な数式は行全体でなく数式内部だけをスクロールさせる。 */
+  .problem-statement-text .katex,
+  .block-code .katex,
+  .solution-line-code .katex {
+    display: inline-block;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    vertical-align: middle;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .problem-statement-text .katex-display,
+  .block-code .katex-display,
+  .solution-line-code .katex-display {
+    margin: 0.45em 0;
+    font-size: 0.86em;
+  }
+
+  .solution-line {
+    align-items: flex-start;
+  }
+
   /* スマホではPC版タブを非表示、ページインジケーターを表示 */
   .page-tabs {
     display: none;
@@ -1583,6 +1618,8 @@
   color: #e2e8f0;
   white-space: pre-wrap;
   padding-right: var(--space-md);
+  min-width: 0;
+  flex: 1;
 }
 
 .solution-line-comment {
