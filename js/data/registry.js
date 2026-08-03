@@ -96,6 +96,16 @@ const CATEGORIES = window.CATEGORIES = [
     paperAuthors: 'Ghosh et al. (2025)',
   },
   {
+    id: 'papers_incontext_benign_overfitting',
+    label: '論文 / ICL Benign Overfitting',
+    parentId: 'machine_learning',
+    icon: '📄',
+    color: '#f59e0b',
+    available: true,
+    randomEligible: true,
+    paperTitle: 'In-Context Benign Overfitting',
+  },
+  {
     id: 'ml_theory',
     label: '学習理論',
     parentId: 'machine_learning',
