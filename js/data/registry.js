@@ -106,6 +106,16 @@ const CATEGORIES = window.CATEGORIES = [
     paperTitle: 'In-Context Benign Overfitting',
   },
   {
+    id: 'papers_trained_transformer_classifiers',
+    label: '論文 / Transformer Classifiers',
+    parentId: 'machine_learning',
+    icon: '📄',
+    color: '#14b8a6',
+    available: true,
+    randomEligible: true,
+    paperTitle: 'Trained Transformer Classifiers Generalize',
+  },
+  {
     id: 'ml_theory',
     label: '学習理論',
     parentId: 'machine_learning',
