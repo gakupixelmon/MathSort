@@ -6,17 +6,17 @@
   categoryLabel: '機械学習 / 論文 / Trained Transformer Classifiers Generalize',
   difficulty: 5,
   language: 'proof',
-  description: '【定理 4.2 の記憶保証】\\n等方的な高次元設定で、文脈中の $k$ 番目の例をクエリとして再入力したときの学習済み Transformer のスコアが\\n$$f(E(x_k);W_{\\rm MM})=y_k\\lVert x_k\\rVert_2^2+r_k$$\\nと書けるとする。集中評価が同時に成り立つ良い事象 $\\mathcal H$ 上で $|r_k|<\\lVert x_k\\rVert_2^2$ がすべての $k=1,\\ldots,M$ について成立し、$P(\\mathcal H^c)\\le q$ とする。示すべき結論は\\n$$P\\left(\\forall k,\\ \\operatorname{sign}f(E(x_k);W_{\\rm MM})=y_k\\right)\\ge1-q$$\\nである。以下の証明ステップを正しい順序に並び替えよ。',
+  description: '【定理 4.2 の記憶保証】\n等方的な高次元設定で、文脈中の $k$ 番目の例をクエリとして再入力したときの学習済み Transformer のスコアが\n$$f(E(x_k);W_{\\rm MM})=y_k\\lVert x_k\\rVert_2^2+r_k$$\nと書けるとする。集中評価が同時に成り立つ良い事象 $\\mathcal H$ 上で $|r_k|<\\lVert x_k\\rVert_2^2$ がすべての $k=1,\\ldots,M$ について成立し、$P(\\mathcal H^c)\\le q$ とする。示すべき結論は\n$$P\\left(\\forall k,\\ \\operatorname{sign}f(E(x_k);W_{\\rm MM})=y_k\\right)\\ge1-q$$\nである。以下の証明ステップを正しい順序に並び替えよ。',
   pinnedCode: ['【証明】'],
   blocks: [
     {
       id: 0,
-      code: '$\\mathcal H$ 上で各 $k$ について $|r_k|<\\lVert x_k\\rVert_2^2$ なので、\\n$\\displaystyle y_k f(E(x_k);W_{\\rm MM})=\\lVert x_k\\rVert_2^2+y_kr_k\\ge\\lVert x_k\\rVert_2^2-|r_k|>0$\\nである。',
+      code: '$\\mathcal H$ 上で各 $k$ について $|r_k|<\\lVert x_k\\rVert_2^2$ なので、\n$\\displaystyle y_k f(E(x_k);W_{\\rm MM})=\\lVert x_k\\rVert_2^2+y_kr_k\\ge\\lVert x_k\\rVert_2^2-|r_k|>0$\nである。',
       solutionComment: '∵ $y_k\\in\\{\\pm1\\}$ より $y_kr_k\\ge-|r_k|$。自己相関項 $\\lVert x_k\\rVert_2^2$ が残差を上回る。',
     },
     {
       id: 1,
-      code: 'よって $\\mathcal H$ 上では、すべての $k=1,\\ldots,M$ で\\n$\\displaystyle \\operatorname{sign}f(E(x_k);W_{\\rm MM})=y_k$\\nが同時に成り立つ。',
+      code: 'よって $\\mathcal H$ 上では、すべての $k=1,\\ldots,M$ で\n$\\displaystyle \\operatorname{sign}f(E(x_k);W_{\\rm MM})=y_k$\nが同時に成り立つ。',
       solutionComment: 'スコアに $y_k$ を掛けた値が正なので、スコアの符号は観測ラベル $y_k$ と一致する。',
     },
     {
@@ -26,12 +26,12 @@
     },
     {
       id: 3,
-      code: '補集合を取れば $\\mathcal M^c\\subseteq\\mathcal H^c$ であり、\\n$\\displaystyle P(\\mathcal M^c)\\le P(\\mathcal H^c)\\le q$\\nとなる。',
+      code: '補集合を取れば $\\mathcal M^c\\subseteq\\mathcal H^c$ であり、\n$\\displaystyle P(\\mathcal M^c)\\le P(\\mathcal H^c)\\le q$\nとなる。',
       solutionComment: '∵ すべての $k$ に対する集中評価を $\\mathcal H$ に含めている。個別評価から構成する際には、ここで $M$ 個の失敗事象に和集合評価を使う。',
     },
     {
       id: 4,
-      code: 'したがって\\n$\\displaystyle P(\\mathcal M)=1-P(\\mathcal M^c)\\ge1-q$\\nである。$\\square$',
+      code: 'したがって\n$\\displaystyle P(\\mathcal M)=1-P(\\mathcal M^c)\\ge1-q$\nである。$\\square$',
       solutionComment: '論文では $q$ を $4M\\exp(-c\\rho\\sqrt d/M)+8M\\exp(-c\\rho d/(M(\\widetilde R^2\\vee\\widetilde R)))$ と評価している。',
     },
   ],
