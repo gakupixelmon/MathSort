@@ -6,7 +6,7 @@
   categoryLabel: '機械学習 / 論文 / Trained Transformer Classifiers Generalize',
   difficulty: 5,
   language: 'proof',
-  description: '【定理 4.1 の証明骨格】\\nクリーンラベルを $\\widetilde y\\in\\{\\pm1\\}$、観測ラベルを $y=\\xi\\widetilde y$ とし、独立な反転変数 $\\xi$ は $P(\\xi=-1)=p<1/2$ を満たす。最小ノルム補間で訓練した Transformer のスコアを $f(E;W_{\\rm MM})$ とする。ある良い事象 $\\mathcal G$ 上で、論文の KKT 条件と集中評価から\\n$$\\widetilde y f(E;W_{\\rm MM})\\ge a>0$$\\nが導かれ、さらに $P(\\mathcal G^c)\\le\\delta$ とする。このとき観測ラベルに対するテスト誤差は $R(W_{\\rm MM})\\le p+\\delta$ である。以下の証明ステップを正しい順序に並び替えよ。',
+  description: '【定理 4.1 の証明骨格】\nクリーンラベルを $\\widetilde y\\in\\{\\pm1\\}$、観測ラベルを $y=\\xi\\widetilde y$ とし、独立な反転変数 $\\xi$ は $P(\\xi=-1)=p<1/2$ を満たす。最小ノルム補間で訓練した Transformer のスコアを $f(E;W_{\\rm MM})$ とする。ある良い事象 $\\mathcal G$ 上で、論文の KKT 条件と集中評価から\n$$\\widetilde y f(E;W_{\\rm MM})\\ge a>0$$\nが導かれ、さらに $P(\\mathcal G^c)\\le\\delta$ とする。このとき観測ラベルに対するテスト誤差は $R(W_{\\rm MM})\\le p+\\delta$ である。以下の証明ステップを正しい順序に並び替えよ。',
   pinnedCode: ['【証明】'],
   blocks: [
     {
@@ -16,27 +16,27 @@
     },
     {
       id: 1,
-      code: 'したがって和集合評価より\\n$\\displaystyle R(W_{\\rm MM})\\le P(\\xi=-1)+P\\bigl(\\widetilde y f(E;W_{\\rm MM})\\le0\\bigr)=p+P\\bigl(\\widetilde y f(E;W_{\\rm MM})\\le0\\bigr)$\\nである。',
+      code: 'したがって和集合評価より\n$\\displaystyle R(W_{\\rm MM})\\le P(\\xi=-1)+P\\bigl(\\widetilde y f(E;W_{\\rm MM})\\le0\\bigr)=p+P\\bigl(\\widetilde y f(E;W_{\\rm MM})\\le0\\bigr)$\nである。',
       solutionComment: '∵ $\\xi=1$ なら $y=\\widetilde y$ なので、後者はクリーンラベルに対する誤分類事象である。',
     },
     {
       id: 2,
-      code: '良い事象 $\\mathcal G$ 上では、ラベル反転率の集中、二次形式の集中、および KKT 条件から得た重みの評価により\\n$\\displaystyle \\widetilde y f(E;W_{\\rm MM})\\ge a>0$\\nが成り立つ。',
+      code: '良い事象 $\\mathcal G$ 上では、ラベル反転率の集中、二次形式の集中、および KKT 条件から得た重みの評価により\n$\\displaystyle \\widetilde y f(E;W_{\\rm MM})\\ge a>0$\nが成り立つ。',
       solutionComment: '∵ 論文では正の信号項を、経験的反転率のずれ・文脈特徴の交差項・重み行列の誤差項より優勢にしている。',
     },
     {
       id: 3,
-      code: 'ゆえに $\\mathcal G$ 上では $\\widetilde y f(E;W_{\\rm MM})\\le0$ は起こらず、\\n$\\displaystyle \\{\\widetilde y f(E;W_{\\rm MM})\\le0\\}\\subseteq\\mathcal G^c$\\nである。',
+      code: 'ゆえに $\\mathcal G$ 上では $\\widetilde y f(E;W_{\\rm MM})\\le0$ は起こらず、\n$\\displaystyle \\{\\widetilde y f(E;W_{\\rm MM})\\le0\\}\\subseteq\\mathcal G^c$\nである。',
       solutionComment: '正のマージンがあれば、クリーンラベルに対する符号誤りは排除される。',
     },
     {
       id: 4,
-      code: 'したがって\\n$\\displaystyle P\\bigl(\\widetilde y f(E;W_{\\rm MM})\\le0\\bigr)\\le P(\\mathcal G^c)\\le\\delta$\\nを得る。',
+      code: 'したがって\n$\\displaystyle P\\bigl(\\widetilde y f(E;W_{\\rm MM})\\le0\\bigr)\\le P(\\mathcal G^c)\\le\\delta$\nを得る。',
       solutionComment: '∵ 失敗確率は、必要な集中評価が同時に成立しない確率だけで上から抑えられる。',
     },
     {
       id: 5,
-      code: 'これをブロック 1 の誤差分解へ代入して\\n$\\displaystyle R(W_{\\rm MM})\\le p+\\delta$\\nとなる。$\\square$',
+      code: 'これをブロック 1 の誤差分解へ代入して\n$\\displaystyle R(W_{\\rm MM})\\le p+\\delta$\nとなる。$\\square$',
       solutionComment: '観測ラベルに対する誤差は、情報理論的に避けられない反転率 $p$ に集中評価の失敗確率だけを加えたものになる。',
     },
   ],

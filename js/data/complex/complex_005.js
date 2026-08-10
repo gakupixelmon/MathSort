@@ -7,7 +7,7 @@
   categoryLabel: '複素関数',
   difficulty: 5,
   language: 'proof',
-  description: '【定理（主値積分による復元公式）】\n$f$ は閉上半平面で正則であり、上半平面内で $|z|\\to\\infty$ のとき $f(z)=O(|z|^{-1-\\delta})$（ある $\\delta>0$）を満たすとする。$x\\in\\mathbb{R}$ に対して\n$$\\operatorname{PV}\\int_{-\\infty}^{\\infty}\\frac{f(t)}{t-x}\\,dt\\n=\\lim_{\\varepsilon\\to0+}\\left(\\int_{-\\infty}^{x-\\varepsilon}\\frac{f(t)}{t-x}\\,dt+\\int_{x+\\varepsilon}^{\\infty}\\frac{f(t)}{t-x}\\,dt\\right)$$\nと定める。このとき\n$$f(x)=\\frac{1}{\\pi i}\\operatorname{PV}\\int_{-\\infty}^{\\infty}\\frac{f(t)}{t-x}\\,dt$$\nが成り立つ。以下の証明ステップを正しい順序に並び替えよ。',
+  description: '【定理（主値積分による復元公式）】\n$f$ は閉上半平面で正則であり、上半平面内で $|z|\\to\\infty$ のとき $f(z)=O(|z|^{-1-\\delta})$（ある $\\delta>0$）を満たすとする。$x\\in\\mathbb{R}$ に対して\n$$\\operatorname{PV}\\int_{-\\infty}^{\\infty}\\frac{f(t)}{t-x}\\,dt\n=\\lim_{\\varepsilon\\to0+}\\left(\\int_{-\\infty}^{x-\\varepsilon}\\frac{f(t)}{t-x}\\,dt+\\int_{x+\\varepsilon}^{\\infty}\\frac{f(t)}{t-x}\\,dt\\right)$$\nと定める。このとき\n$$f(x)=\\frac{1}{\\pi i}\\operatorname{PV}\\int_{-\\infty}^{\\infty}\\frac{f(t)}{t-x}\\,dt$$\nが成り立つ。以下の証明ステップを正しい順序に並び替えよ。',
   pinnedCode: [
     '【証明】',
   ],
