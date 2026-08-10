@@ -129,6 +129,8 @@
 - **機械学習 (論文 / In-Context Benign Overfitting)**
   - `inContextBenignOverfitting/ml_010.js` (LGPへのモーメント整合還元 ★4)
   - `inContextBenignOverfitting/ml_011.js` (最小ノルム補間解のリスク分解 ★5)
+  - `inContextBenignOverfitting/ml_014.js` (最小ノルム補間解の射影構造 ★3)
+  - `inContextBenignOverfitting/ml_015.js` (ノイズ補間項と逆 Gram 行列 ★3)
 - **機械学習 (論文 / Trained Transformer Classifiers Generalize)**
   - `trainedTransformerClassifiers/ml_012.js` (Transformer 分類器の汎化誤差分解 ★5)
   - `trainedTransformerClassifiers/ml_013.js` (文脈内のノイズラベルを記憶する機構 ★5)
