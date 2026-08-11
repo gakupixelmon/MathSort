@@ -134,6 +134,8 @@
 - **機械学習 (論文 / Trained Transformer Classifiers Generalize)**
   - `trainedTransformerClassifiers/ml_012.js` (Transformer 分類器の汎化誤差分解 ★5)
   - `trainedTransformerClassifiers/ml_013.js` (文脈内のノイズラベルを記憶する機構 ★5)
+  - `trainedTransformerClassifiers/ml_016.js` (ラベル反転を含む分類誤差の分解 ★2)
+  - `trainedTransformerClassifiers/ml_017.js` (自己相関優勢から全例記憶へ ★3)
 - **機械学習 (学習理論)**
   - `theory/ml_theory_001.js` (ラデマッハ複雑度に基づく汎化境界 ★5)
   - `theory/ml_theory_002.js` (マクディアミッドの不等式 ★5)
