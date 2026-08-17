@@ -136,6 +136,13 @@
   - `trainedTransformerClassifiers/ml_013.js` (文脈内のノイズラベルを記憶する機構 ★5)
   - `trainedTransformerClassifiers/ml_016.js` (ラベル反転を含む分類誤差の分解 ★2)
   - `trainedTransformerClassifiers/ml_017.js` (自己相関優勢から全例記憶へ ★3)
+- **機械学習 (論文 / High-dimensional Feature Learning)**
+  - `highDimFeatureLearning/ml_018.js` (ガウス教師の定数・線形・残差分解 ★3)
+  - `highDimFeatureLearning/ml_019.js` (rank-one 勾配 spike の特異値構造 ★3)
+  - `highDimFeatureLearning/ml_020.js` (十分強い spike による主方向の整列 ★4)
+  - `highDimFeatureLearning/ml_021.js` (Gaussian equivalent 特徴の線形下界 ★4)
+  - `highDimFeatureLearning/ml_022.js` (平滑化 single-index 特徴の最良予測 ★3)
+  - `highDimFeatureLearning/ml_023.js` (大きい学習率で固定カーネル下界を越える条件 ★5)
 - **機械学習 (学習理論)**
   - `theory/ml_theory_001.js` (ラデマッハ複雑度に基づく汎化境界 ★5)
   - `theory/ml_theory_002.js` (マクディアミッドの不等式 ★5)

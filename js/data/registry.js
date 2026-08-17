@@ -116,6 +116,17 @@ const CATEGORIES = window.CATEGORIES = [
     paperTitle: 'Trained Transformer Classifiers Generalize',
   },
   {
+    id: 'papers_high_dim_feature_learning',
+    label: '論文 / Feature Learning',
+    parentId: 'machine_learning',
+    icon: '📄',
+    color: '#fb7185',
+    available: true,
+    randomEligible: true,
+    paperTitle: 'High-dimensional Asymptotics of Feature Learning: How One Gradient Step Improves the Representation',
+    paperAuthors: 'Ba et al. (2022)',
+  },
+  {
     id: 'ml_theory',
     label: '学習理論',
     parentId: 'machine_learning',
