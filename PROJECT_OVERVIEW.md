@@ -106,6 +106,7 @@
   - `stat_007.js` (条件付き期待値の塔の公式 ★4)
   - `stat_008.js` (マルコフの不等式の証明 ★2)
   - `stat_009.js` (Doob のマルチンゲール不等式 ★5)
+  - `stat_010.js` (Jensen の不等式の証明 ★3)
 - **複素関数**
   - `complex_001.js` (Cauchy-Riemann 方程式の必要性 ★2)
   - `complex_002.js` (Liouville の定理 ★3)
