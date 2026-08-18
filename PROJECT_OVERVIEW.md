@@ -150,6 +150,7 @@
   - `theory/ml_theory_003.js` (Talagrand の収縮補題 ★5)
   - `theory/ml_theory_004.js` (Vapnik-Chervonenkis の定理 ★5)
   - `theory/ml_theory_005.js` (サウアー・シェラハの補題 ★5)
+  - `theory/ml_theory_006.js` (Moore-Aronszajn の定理 ★5)
 
 ---
 
