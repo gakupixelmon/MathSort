@@ -144,6 +144,11 @@
   - `highDimFeatureLearning/ml_021.js` (Gaussian equivalent 特徴の線形下界 ★4)
   - `highDimFeatureLearning/ml_022.js` (平滑化 single-index 特徴の最良予測 ★3)
   - `highDimFeatureLearning/ml_023.js` (大きい学習率で固定カーネル下界を越える条件 ★5)
+- **機械学習 (論文 / Contextual RAF)**
+  - `contextualRaf/ml_024.js` (RAF ラベル付き入力の直交分解 ★4)
+  - `contextualRaf/ml_025.js` (規則汎化の必要十分条件 ★5)
+  - `contextualRaf/ml_026.js` (margin 分解から全事実再生へ ★4)
+  - `contextualRaf/ml_027.js` (二成分スペクトルで規則と事実を両立する構成 ★5)
 - **機械学習 (学習理論)**
   - `theory/ml_theory_001.js` (ラデマッハ複雑度に基づく汎化境界 ★5)
   - `theory/ml_theory_002.js` (マクディアミッドの不等式 ★5)
