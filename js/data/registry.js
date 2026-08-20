@@ -127,6 +127,17 @@ const CATEGORIES = window.CATEGORIES = [
     paperAuthors: 'Ba et al. (2022)',
   },
   {
+    id: 'papers_contextual_raf',
+    label: '論文 / Contextual RAF',
+    parentId: 'machine_learning',
+    icon: '📄',
+    color: '#f97316',
+    available: true,
+    randomEligible: true,
+    paperTitle: 'The Rules-and-Facts Model for Simultaneous Generalization and Memorization',
+    paperAuthors: 'Farné, Boncoraglio, Zdeborová (2026); contextual RAF extensions',
+  },
+  {
     id: 'ml_theory',
     label: '学習理論',
     parentId: 'machine_learning',
