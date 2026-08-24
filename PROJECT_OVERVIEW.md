@@ -113,6 +113,11 @@
   - `complex_003.js` (留数定理 ★4)
   - `complex_004.js` (べき級数の収束半径の公式 ★4)
   - `complex_005.js` (主値積分と元の関数の一致 ★5)
+- **代数学 (線形代数)**
+  - `linearAlgebra/la_001.js` (相異なる固有空間の直和性 ★3)
+  - `linearAlgebra/la_002.js` (対角化可能性と固有空間分解 ★4)
+  - `linearAlgebra/la_003.js` (固有射影によるスペクトル分解 ★4)
+  - `linearAlgebra/la_004.js` (スペクトル分解から行列関数を求める ★3)
 - **制御工学**
   - `modern/ctrl_modern_001.js` (2次線形システムの漸近安定条件 ★3)
   - `modern/ctrl_modern_002.js` (可制御性・可観測性のランク条件 ★4)

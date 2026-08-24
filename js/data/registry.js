@@ -47,6 +47,23 @@ const CATEGORIES = window.CATEGORIES = [
     randomEligible: true,
   },
   {
+    id: 'algebra',
+    label: '代数学',
+    icon: '𝔸',
+    color: '#ef4444',
+    available: true,
+    randomEligible: false,
+  },
+  {
+    id: 'linear_algebra',
+    label: '線形代数',
+    parentId: 'algebra',
+    icon: '▦',
+    color: '#f97316',
+    available: true,
+    randomEligible: true,
+  },
+  {
     id: 'machine_learning',
     label: '機械学習',
     icon: '🧠',
