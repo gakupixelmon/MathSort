@@ -64,6 +64,15 @@ const CATEGORIES = window.CATEGORIES = [
     randomEligible: true,
   },
   {
+    id: 'tensor_algebra',
+    label: 'テンソル代数',
+    parentId: 'algebra',
+    icon: '⊗',
+    color: '#ec4899',
+    available: true,
+    randomEligible: true,
+  },
+  {
     id: 'machine_learning',
     label: '機械学習',
     icon: '🧠',
