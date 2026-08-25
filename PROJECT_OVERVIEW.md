@@ -121,6 +121,13 @@
   - `linearAlgebra/la_002.js` (対角化可能性と固有空間分解 ★4)
   - `linearAlgebra/la_003.js` (固有射影によるスペクトル分解 ★4)
   - `linearAlgebra/la_004.js` (スペクトル分解から行列関数を求める ★3)
+- **代数学 (テンソル代数)**
+  - `tensorAlgebra/ta_001.js` (テンソル積の基底と次元 ★4)
+  - `tensorAlgebra/ta_002.js` (一次写像空間の基底と次元 ★3)
+  - `tensorAlgebra/ta_003.js` (テンソルと一次写像の標準同型 ★4)
+  - `tensorAlgebra/ta_004.js` (テンソル積の結合則 ★5)
+  - `tensorAlgebra/ta_005.js` (多重テンソル積の基底と次元 ★3)
+  - `tensorAlgebra/ta_006.js` (重一次写像の線形化 ★4)
 - **制御工学**
   - `modern/ctrl_modern_001.js` (2次線形システムの漸近安定条件 ★3)
   - `modern/ctrl_modern_002.js` (可制御性・可観測性のランク条件 ★4)
