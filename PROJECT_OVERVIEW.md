@@ -110,6 +110,7 @@
   - `stat_011.js` (スーパーマルチンゲールの上向き横断不等式 ★4)
   - `stat_012.js` (スーパーマルチンゲール収束定理 ★5)
   - `stat_013.js` (一様可積分マルチンゲール収束定理 ★5)
+  - `stat_014.js` (McKean--Vlasov型SDEの強解の存在と一意性 ★5)
 - **複素関数**
   - `complex_001.js` (Cauchy-Riemann 方程式の必要性 ★2)
   - `complex_002.js` (Liouville の定理 ★3)
