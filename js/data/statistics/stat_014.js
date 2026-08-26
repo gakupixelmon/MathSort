@@ -1,0 +1,41 @@
+// stat_014: McKean--Vlasov型SDEの強解の存在と一意性 ★5
+(window.PROBLEMS_REGISTRY = window.PROBLEMS_REGISTRY || []).push({
+  id: 'stat_014',
+  title: 'McKean--Vlasov型SDEの強解',
+  category: 'statistics',
+  categoryLabel: '統計学',
+  difficulty: 5,
+  language: 'proof',
+  description: '【定理（大域Lipschitz条件下のMcKean--Vlasov型SDE）】\n$X_0\\in L^2(\\Omega;\\mathbb R^d)$ とし、$b,\\sigma$ がある $L,C>0$ に対して\n$$\\|b(t,x,\\mu)-b(t,y,\\nu)\\|+\\|\\sigma(t,x,\\mu)-\\sigma(t,y,\\nu)\\|_{\\mathrm F}\\le L(\\|x-y\\|+W_2(\\mu,\\nu)),$$\n$$\\|b(t,0,\\delta_0)\\|+\\|\\sigma(t,0,\\delta_0)\\|_{\\mathrm F}\\le C$$\nを満たすとする。このとき\n$$dX_t=b(t,X_t,\\operatorname{Law}(X_t))\\,dt+\\sigma(t,X_t,\\operatorname{Law}(X_t))\\,dB_t$$\nは $[0,T]$ 上で経路ごとに一意な強解を持ち、$E[\\sup_{0\\le t\\le T}\\|X_t\\|^2]<\\infty$ である。以下の証明ステップを正しい順序に並び替えよ。',
+  pinnedCode: ['【証明】'],
+  blocks: [
+    { id: 0, code: '$m_2(\\mu)=\\int\\|z\\|^2\\,d\\mu(z)$ とおく。$W_2(\\mu,\\delta_0)^2=m_2(\\mu)$ だから、Lipschitz条件と原点での評価より、ある $K>0$ に対して\n$\\displaystyle \\|b(t,x,\\mu)\\|^2+\\|\\sigma(t,x,\\mu)\\|_{\\mathrm F}^2\\le K(1+\\|x\\|^2+m_2(\\mu))$\nが成り立つ。', solutionComment: '$y=0,\\nu=\\delta_0$ をLipschitz評価へ代入し、$(a+b+c)^2\\le3(a^2+b^2+c^2)$ を使う。$\\mu$ と $\\delta_0$ の結合は一意なので $W_2(\\mu,\\delta_0)^2=m_2(\\mu)$。' },
+    { id: 1, code: '$X_t^{(0)}=X_0$ とし、帰納的に\n$\\displaystyle X_t^{(n+1)}=X_0+\\int_0^tb(s,X_s^{(n)},\\mu_s^{(n)})\\,ds+\\int_0^t\\sigma(s,X_s^{(n)},\\mu_s^{(n)})\\,dB_s,$\n$\\mu_s^{(n)}=\\operatorname{Law}(X_s^{(n)})$ と定める。', solutionComment: 'Picard反復で、前段階の過程とその法則を係数へ代入する。ブロック0の線形成長評価により、各反復は帰納的に二乗可積分な適合連続過程として定義できる。' },
+    { id: 2, code: '$n\\ge1$ に対して\n$\\displaystyle D_n(t)=E\\left[\\sup_{0\\le u\\le t}\\|X_u^{(n+1)}-X_u^{(n)}\\|^2\\right]$\nとおく。二つの確率変数を同じ確率空間上で組にすると、\n$\\displaystyle W_2(\\mu_s^{(n)},\\mu_s^{(n-1)})^2\\le E\\|X_s^{(n)}-X_s^{(n-1)}\\|^2$\nである。', solutionComment: 'Wasserstein距離は全ての結合にわたる輸送費の下限である。同じ標本 $\\omega$ 上の組 $(X_s^{(n)},X_s^{(n-1)})$ も許される結合なので上界を与える。' },
+    { id: 3, code: 'Lipschitz条件、時間積分へのCauchy--Schwarz不等式、伊藤積分へのBDG不等式、およびブロック2の結合評価から、定数 $K_T>0$ に対し\n$\\displaystyle D_n(t)\\le K_T\\int_0^tD_{n-1}(s)\\,ds\\qquad(0\\le t\\le T)$\nを得る。', solutionComment: 'ドリフト差には $\\sup_{u\\le t}|\\int_0^u f_sds|^2\\le t\\int_0^t|f_s|^2ds$、拡散差には $E\\sup_{u\\le t}|\\int_0^u g_sdB_s|^2\\le C_{\\rm BDG}E\\int_0^t\\|g_s\\|_{\\mathrm F}^2ds$ を使う。' },
+    { id: 4, code: 'ブロック0から $D_0(T):=E[\\sup_{u\\le T}\\|X_u^{(1)}-X_u^{(0)}\\|^2]<\\infty$ である。ブロック3を反復すると\n$\\displaystyle D_n(T)\\le D_0(T)\\frac{(K_TT)^n}{n!}$\nとなる。', solutionComment: '積分不等式を $n$ 回代入すると、領域 $0<s_n<\\cdots<s_1<T$ の体積 $T^n/n!$ が現れる。これがPicard差分の階乗減衰を与える。' },
+    { id: 5, code: '$\\sum_{n\\ge0}\\sqrt{D_n(T)}<\\infty$ なので、Minkowskiの不等式より $(X^{(n)})$ は $L^2(\\Omega;C([0,T];\\mathbb R^d))$ でCauchy列である。従って適合連続過程 $X$ が存在し、\n$\\displaystyle E\\left[\\sup_{t\\le T}\\|X_t^{(n)}-X_t\\|^2\\right]\\longrightarrow0$\nとなる。', solutionComment: '$\\sum_n a^n/\\sqrt{n!}$ は収束する。各 $X^{(n)}$ は連続・適合であり、部分列の一様概収束を取れば極限 $X$ も連続・適合である。' },
+    { id: 6, code: 'さらにブロック2と同じ結合を使えば、各 $t$ で\n$\\displaystyle W_2(\\mu_t^{(n)},\\operatorname{Law}(X_t))^2\\le E\\|X_t^{(n)}-X_t\\|^2\\longrightarrow0.$\n従ってLipschitz条件により、ドリフト積分は $L^2$ で、確率積分はBDG不等式により $L^2(\\Omega;C[0,T])$ で極限へ収束する。', solutionComment: '過程の収束は位置変数だけでなく法則変数の収束も与えるため、分布依存係数へ極限を通せる。' },
+    { id: 7, code: 'ブロック1の等式で $n\\to\\infty$ とすると\n$\\displaystyle X_t=X_0+\\int_0^tb(s,X_s,\\operatorname{Law}(X_s))\\,ds+\\int_0^t\\sigma(s,X_s,\\operatorname{Law}(X_s))\\,dB_s$\nを得る。従って $X$ はMcKean--Vlasov型SDEの強解である。', solutionComment: '極限は与えられた初期値とブラウン運動から構成された適合過程なので、弱解ではなく強解である。' },
+    { id: 8, code: 'ブロック0、Cauchy--Schwarz不等式、BDG不等式を解の積分方程式へ適用すると、$M(t)=E[\\sup_{u\\le t}\\|X_u\\|^2]$ は\n$\\displaystyle M(t)\\le K_T\\left(1+E\\|X_0\\|^2+\\int_0^tM(s)\\,ds\\right)$\nを満たす。', solutionComment: '$m_2(\\operatorname{Law}(X_s))=E\\|X_s\\|^2\\le M(s)$ により、法則の二次モーメントも同じ関数 $M$ で抑えられる。' },
+    { id: 9, code: 'Gronwallの不等式から\n$\\displaystyle E\\left[\\sup_{0\\le t\\le T}\\|X_t\\|^2\\right]=M(T)<\\infty$\nが従う。', solutionComment: 'ブロック8は通常の積分形Gronwall不等式の仮定になっている。これにより解の有限二次モーメント評価が時間区間全体で閉じる。' },
+    { id: 10, code: '同じ初期値とブラウン運動で駆動される二つの強解 $X,Y$ を取る。$H(t)=E[\\sup_{u\\le t}\\|X_u-Y_u\\|^2]$ とおくと、同じ評価と\n$\\displaystyle W_2(\\operatorname{Law}(X_s),\\operatorname{Law}(Y_s))^2\\le E\\|X_s-Y_s\\|^2$\nから\n$\\displaystyle H(t)\\le K_T\\int_0^tH(s)\\,ds$\nを得る。', solutionComment: '存在証明で使った差分評価を二つの解へ適用する。初期値が同じなので、差の積分方程式には初期項が現れない。' },
+    { id: 11, code: 'Gronwallの不等式より $H(t)=0$ である。従って $X_t=Y_t$ が全ての $t\\in[0,T]$ でほとんど確実に成り立ち、経路ごとの一意性が示された。以上で強解の存在、一意性、二次モーメント評価が全て従う。$\\square$', solutionComment: '$H(T)=0$ は $E[\\sup_{t\\le T}\\|X_t-Y_t\\|^2]=0$ を意味するため、二つの連続標本路は同時に全時刻で一致する。' },
+  ],
+  partialOrder: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [0, 8], [7, 8], [8, 9], [7, 10], [9, 11], [10, 11]],
+  hints: [
+    'まずLipschitz条件から、係数の線形成長評価を導きます。',
+    'Picard反復の差に対し、同一確率空間上の結合でWasserstein距離を評価します。',
+    '存在には差分の階乗減衰、一意性にはGronwallの不等式を使います。',
+  ],
+  explanation: {
+    summary: '分布依存項を同一確率空間上の結合で制御すると、通常のSDEと同様のPicard反復とGronwall評価が使えます。',
+    points: [
+      '$W_2(\\operatorname{Law}(X),\\operatorname{Law}(Y))^2\\le E\\|X-Y\\|^2$ が、法則の差を過程の差へ戻す要点です。',
+      'Picard差分は反復積分により $1/n!$ の速さで減少し、全時間区間で収束します。',
+      '一意性では二解を同じブラウン運動上で比較し、差の期待上限へGronwallの不等式を適用します。',
+    ],
+    complexity: { time: 'Picard反復、2-Wasserstein距離、BDG不等式、Gronwallの不等式', space: '存在・モーメント評価・経路ごとの一意性を順に示す' },
+    tip: 'McKean--Vlasov型SDEでは、法則同士を抽象的に比較する代わりに、同じ確率空間上の確率変数を結合として使うのが基本です。',
+  },
+});
