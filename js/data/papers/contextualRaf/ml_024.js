@@ -6,7 +6,7 @@
   categoryLabel: '機械学習 / 論文 / Contextual RAF',
   difficulty: 4,
   language: 'proof',
-  description: '【発展補題（ラベル付き入力の分解）】\n$u\\in\\mathbb S^{d-1}$、$x\\sim\\mathcal N(0,I_d)$ とし、$T=u^\\top x$、$V=x-Tu$ とおく。規則ラベルを $g=\\operatorname{sign}(T)$、RAF ラベルを\n$$y=\\begin{cases}g,&s=0,\\\\ r,&s=1,\\end{cases}\\qquad s\\sim\\operatorname{Ber}(\\varepsilon),\\quad r\\sim\\operatorname{Rad}(1/2)$$\nとする。全ての変数は必要な範囲で独立とする。このとき、ある $A$ と $G\\sim\\mathcal N(0,I_d-uu^\\top)$ が存在して\n$$yx=Au+G,\\qquad E[A]=(1-\\varepsilon)\\sqrt{\\frac2\\pi}=:q_\\varepsilon$$\nとなり、$A$ と $G$ は独立である。以下の証明ステップを正しい順序に並び替えよ。',
+  description: '【発展補題（ラベル付き入力の分解）】\n$u\\in\\mathbb S^{d-1}$、$x\\sim\\mathcal N(0,I_d)$ とし、$T=u^\\top x$、$V=x-Tu$ とおく。規則ラベルを $g=\\operatorname{sign}(T)$、RAF ラベルを\n$$y=\\begin{cases}g,&s=0,\\\\ r,&s=1,\\end{cases}\\qquad s\\sim\\operatorname{Ber}(\\varepsilon),\\quad r\\sim\\operatorname{Rad}(1/2)$$\nとする。全ての変数は必要な範囲で独立とする。このとき、ある $A$ と $G\\sim\\mathcal N(0,I_d-uu^\\top)$ が存在して\n$$yx=Au+G,\\qquad E[A]=(1-\\varepsilon)\\sqrt{\\frac2\\pi}=:q_\\varepsilon$$\nとなり、$A$ と $G$ は独立である。以下の証明ステップを正しい順序に並び替えよ。\n\n【記号】$d$ は入力次元、$\\mathbb S^{d-1}$ は単位球面、$u$ は教師規則の方向、$I_d$ は $d$ 次単位行列、$u^\\top x$ は内積を表す。$\\operatorname{Ber}(\\varepsilon)$ は $1$ を確率 $\\varepsilon$ で取るBernoulli分布で、$s=0$ は規則標本、$s=1$ は事実標本を表す。$\\operatorname{Rad}(1/2)$ は $-1,+1$ を等確率で取るRademacher分布である。$I_d-uu^\\top$ は $u^\\perp$ への直交射影、$q_\\varepsilon$ はラベル付き入力が教師方向へ持つ平均信号である。',
   pinnedCode: ['【証明】'],
   blocks: [
     { id: 0, code: '$\\displaystyle x=Tu+V,\\qquad T\\sim\\mathcal N(0,1),\\qquad V\\sim\\mathcal N(0,I_d-uu^\\top)$\nであり、$T$ と $V$ は独立である。', solutionComment: '標準ガウスベクトルを $u$ 方向とその直交補空間へ直交分解する。' },
