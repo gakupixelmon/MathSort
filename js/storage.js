@@ -246,15 +246,26 @@ const Storage = (() => {
     const remoteUpdatedAt = Number(data.progressUpdatedAt) || 0;
     const localUpdatedAt = Number(local.progressUpdatedAt) || 0;
     const remoteLastPlayed = data.lastPlayed || null;
+    const remoteCurrentStreak = Math.max(Number(data.currentStreak) || 0, 0);
+    const remoteTickets = Math.min(Math.max(Number(data.recoveryTickets) || 0, 0), 1);
     const remoteHasNewerLastPlayed = remoteLastPlayed
       && (!local.lastPlayed || remoteLastPlayed > local.lastPlayed);
+    // 起動時のローカル失効判定が先に走っても、同じ最終プレイ日に紐づく
+    // クラウドの有効なストリークや未使用チケットを失わない。
+    const remoteHasBetterSameDayState = remoteLastPlayed
+      && remoteLastPlayed === local.lastPlayed
+      && (
+        remoteCurrentStreak > local.current
+        || (remoteCurrentStreak === local.current && remoteTickets > local.tickets)
+      );
     const shouldUseRemote = remoteHasNewerLastPlayed
+      || remoteHasBetterSameDayState
       || remoteUpdatedAt > localUpdatedAt;
 
     if (shouldUseRemote) {
-      if (data.currentStreak !== undefined) save(KEYS.STREAK, data.currentStreak);
+      if (data.currentStreak !== undefined) save(KEYS.STREAK, remoteCurrentStreak);
       if (data.lastPlayed !== undefined) save(KEYS.LAST_PLAYED, data.lastPlayed);
-      if (data.recoveryTickets !== undefined) save(KEYS.RECOVERY_TICKETS, Math.min(data.recoveryTickets, 1));
+      if (data.recoveryTickets !== undefined) save(KEYS.RECOVERY_TICKETS, remoteTickets);
       if (data.ticketProgress !== undefined) save(KEYS.TICKET_PROGRESS, data.ticketProgress);
       if (data.catchupProgress !== undefined) save(KEYS.CATCHUP_PROGRESS, data.catchupProgress);
       save(KEYS.PROGRESS_UPDATED_AT, remoteUpdatedAt || Date.now());
@@ -271,6 +282,8 @@ const Storage = (() => {
       save(KEYS.CLEARED, cleared);
     }
 
+    // クラウドから復元したチケットも、その場で欠落日の救済へ適用する。
+    checkStreakValidity();
     return getStreak();
   }
 
