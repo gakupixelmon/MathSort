@@ -84,6 +84,17 @@
   line-height: 1;
 }
 
+.streak-card.freeze-active .streak-fire {
+  filter: hue-rotate(150deg) saturate(1.7) brightness(1.15);
+}
+
+.streak-card.freeze-active .streak-number {
+  background: linear-gradient(135deg, #67e8f9, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .streak-label {
   font-size: 12px;
   color: var(--text-secondary);

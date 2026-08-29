@@ -13,6 +13,7 @@ const Storage = (() => {
     RECOVERY_TICKETS: 'mathsort_recovery_tickets',
     TICKET_PROGRESS: 'mathsort_ticket_progress',
     CATCHUP_PROGRESS: 'mathsort_catchup_progress',
+    LAST_FREEZE_DATE: 'mathsort_last_freeze_date',
     PROGRESS_UPDATED_AT: 'mathsort_progress_updated_at',
   };
 
@@ -61,6 +62,8 @@ const Storage = (() => {
 
   // ストリーク情報を取得
   function getStreak() {
+    const lastFreezeDate = load(KEYS.LAST_FREEZE_DATE, null);
+    const freezeAge = lastFreezeDate ? daysBetween(lastFreezeDate, todayStr()) : null;
     return {
       current: load(KEYS.STREAK, 0),
       max: load(KEYS.MAX_STREAK, 0),
@@ -68,6 +71,8 @@ const Storage = (() => {
       tickets: load(KEYS.RECOVERY_TICKETS, 0),
       ticketProgress: load(KEYS.TICKET_PROGRESS, 0),
       catchupProgress: load(KEYS.CATCHUP_PROGRESS, 0),
+      lastFreezeDate,
+      freezeActive: freezeAge !== null && freezeAge >= 0 && freezeAge <= 1,
       progressUpdatedAt: load(KEYS.PROGRESS_UPDATED_AT, 0),
     };
   }
@@ -84,6 +89,7 @@ const Storage = (() => {
     let tickets = Math.min(load(KEYS.RECOVERY_TICKETS, 0), 1);
     let ticketProgress = load(KEYS.TICKET_PROGRESS, 0);
     let catchupProgress = load(KEYS.CATCHUP_PROGRESS, 0);
+    let lastFreezeDate = load(KEYS.LAST_FREEZE_DATE, null);
     let streakAdvance = 0;
     const dayGap = lastPlayed ? daysBetween(lastPlayed, today) : null;
     let bonusTriggered = false;
@@ -93,6 +99,7 @@ const Storage = (() => {
     } else if (!lastPlayed || dayGap === null || dayGap <= 0) {
       // 初回
       streak = 1;
+      lastFreezeDate = null;
       streakAdvance = 1;
     } else if (dayGap === 1) {
       // 昨日もプレイ → 連続継続
@@ -101,6 +108,7 @@ const Storage = (() => {
     } else if (dayGap === 2 && tickets > 0) {
       // 1日だけ忘れた場合は復帰チケットを消費してストリークを維持
       tickets = 0;
+      lastFreezeDate = getPrevDay(today);
       streak += 2;
       streakAdvance = 2;
     } else {
@@ -108,6 +116,7 @@ const Storage = (() => {
       streak = 1;
       ticketProgress = 0;
       catchupProgress = 0;
+      lastFreezeDate = null;
       streakAdvance = 1;
     }
 
@@ -143,6 +152,7 @@ const Storage = (() => {
     save(KEYS.RECOVERY_TICKETS, tickets);
     save(KEYS.TICKET_PROGRESS, ticketProgress);
     save(KEYS.CATCHUP_PROGRESS, catchupProgress);
+    save(KEYS.LAST_FREEZE_DATE, lastFreezeDate);
     save(KEYS.PROGRESS_UPDATED_AT, Date.now());
 
     if (streak > maxStreak) save(KEYS.MAX_STREAK, streak);
@@ -185,6 +195,7 @@ const Storage = (() => {
     let streak = load(KEYS.STREAK, 0);
     let tickets = Math.min(load(KEYS.RECOVERY_TICKETS, 0), 1);
     let catchupProgress = load(KEYS.CATCHUP_PROGRESS, 0);
+    let lastFreezeDate = load(KEYS.LAST_FREEZE_DATE, null);
     let maxStreak = load(KEYS.MAX_STREAK, 0);
 
     if (!lastPlayed) return 0;
@@ -200,6 +211,7 @@ const Storage = (() => {
 
       streak += 1;
       tickets -= 1;
+      lastFreezeDate = lastPlayed;
 
       if (streak < maxStreak) {
         catchupProgress += 1;
@@ -219,6 +231,7 @@ const Storage = (() => {
       save(KEYS.STREAK, streak);
       save(KEYS.RECOVERY_TICKETS, tickets);
       save(KEYS.CATCHUP_PROGRESS, catchupProgress);
+      save(KEYS.LAST_FREEZE_DATE, lastFreezeDate);
       if (streak > maxStreak) {
         maxStreak = streak;
         save(KEYS.MAX_STREAK, maxStreak);
@@ -234,6 +247,7 @@ const Storage = (() => {
     save(KEYS.STREAK, 0);
     save(KEYS.TICKET_PROGRESS, 0);
     save(KEYS.CATCHUP_PROGRESS, 0);
+    save(KEYS.LAST_FREEZE_DATE, null);
     save(KEYS.PROGRESS_UPDATED_AT, Date.now());
     return 0;
   }
@@ -248,6 +262,7 @@ const Storage = (() => {
     const remoteLastPlayed = data.lastPlayed || null;
     const remoteCurrentStreak = Math.max(Number(data.currentStreak) || 0, 0);
     const remoteTickets = Math.min(Math.max(Number(data.recoveryTickets) || 0, 0), 1);
+    const remoteLastFreezeDate = data.lastFreezeDate || null;
     const remoteHasNewerLastPlayed = remoteLastPlayed
       && (!local.lastPlayed || remoteLastPlayed > local.lastPlayed);
     // 起動時のローカル失効判定が先に走っても、同じ最終プレイ日に紐づく
@@ -257,6 +272,12 @@ const Storage = (() => {
       && (
         remoteCurrentStreak > local.current
         || (remoteCurrentStreak === local.current && remoteTickets > local.tickets)
+        || (
+          remoteCurrentStreak === local.current
+          && remoteTickets === local.tickets
+          && remoteLastFreezeDate
+          && (!local.lastFreezeDate || remoteLastFreezeDate > local.lastFreezeDate)
+        )
       );
     const shouldUseRemote = remoteHasNewerLastPlayed
       || remoteHasBetterSameDayState
@@ -268,6 +289,7 @@ const Storage = (() => {
       if (data.recoveryTickets !== undefined) save(KEYS.RECOVERY_TICKETS, remoteTickets);
       if (data.ticketProgress !== undefined) save(KEYS.TICKET_PROGRESS, data.ticketProgress);
       if (data.catchupProgress !== undefined) save(KEYS.CATCHUP_PROGRESS, data.catchupProgress);
+      if (data.lastFreezeDate !== undefined) save(KEYS.LAST_FREEZE_DATE, remoteLastFreezeDate);
       save(KEYS.PROGRESS_UPDATED_AT, remoteUpdatedAt || Date.now());
     }
 
