@@ -66,6 +66,8 @@ test('uses one recovery ticket to cover exactly one missed day', () => {
     },
     { current: 8, max: 8, lastPlayed: '2026-08-29', tickets: 0 }
   );
+  assert.equal(storage.getStreak().lastFreezeDate, '2026-08-29');
+  assert.equal(storage.getStreak().freezeActive, true);
 });
 
 test('continues the streak when the user clears after a frozen day', () => {
@@ -85,6 +87,8 @@ test('continues the streak when the user clears after a frozen day', () => {
   assert.equal(streak.lastPlayed, '2026-08-30');
   assert.equal(streak.tickets, 0);
   assert.equal(streak.ticketProgress, 1);
+  assert.equal(streak.lastFreezeDate, '2026-08-29');
+  assert.equal(streak.freezeActive, true);
 });
 
 test('restores a cloud ticket after a premature local expiry', () => {
@@ -113,6 +117,8 @@ test('restores a cloud ticket after a premature local expiry', () => {
   assert.equal(streak.current, 8);
   assert.equal(streak.lastPlayed, '2026-08-29');
   assert.equal(streak.tickets, 0);
+  assert.equal(streak.lastFreezeDate, '2026-08-29');
+  assert.equal(streak.freezeActive, true);
   assert.ok(streak.progressUpdatedAt > 200);
 });
 
@@ -128,4 +134,17 @@ test('does not freeze two consecutive missed days with one ticket', () => {
 
   assert.equal(storage.checkStreakValidity(), 0);
   assert.equal(storage.getStreak().tickets, 0);
+  assert.equal(storage.getStreak().freezeActive, false);
+});
+
+test('stops highlighting a freeze after the following day', () => {
+  const storage = createStorage({
+    mathsort_last_played: '2026-08-29',
+    mathsort_streak: 8,
+    mathsort_max_streak: 8,
+    mathsort_recovery_tickets: 0,
+    mathsort_last_freeze_date: '2026-08-28',
+  });
+
+  assert.equal(storage.getStreak().freezeActive, false);
 });

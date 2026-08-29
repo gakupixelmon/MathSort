@@ -160,6 +160,7 @@ const AuthManager = (() => {
         recoveryTickets: streakData.tickets || 0,
         ticketProgress: streakData.ticketProgress || 0,
         catchupProgress: streakData.catchupProgress || 0,
+        lastFreezeDate: streakData.lastFreezeDate || null,
         progressUpdatedAt: streakData.progressUpdatedAt || Date.now(),
         totalClears: totalClears || 0,
         clearedIds: clearedIds,

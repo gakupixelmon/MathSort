@@ -64,6 +64,7 @@ const App = (() => {
     const ticketProgressEl = document.getElementById('ticket-progress');
     const catchupProgressEl = document.getElementById('catchup-progress');
     const todayStatusEl = document.getElementById('today-play-status');
+    const streakCardEl = document.getElementById('streak-card');
 
     if (streakEl) streakEl.textContent = currentStreak;
     if (maxStreakEl) maxStreakEl.textContent = streak.max;
@@ -80,6 +81,13 @@ const App = (() => {
 
     const fireEl = document.getElementById('streak-fire');
     if (fireEl) fireEl.style.display = currentStreak > 0 ? 'inline' : 'none';
+    const freezeActive = currentStreak > 0 && streak.freezeActive;
+    if (streakCardEl) streakCardEl.classList.toggle('freeze-active', freezeActive);
+    if (fireEl) {
+      fireEl.title = freezeActive
+        ? '復帰チケットでストリークを維持しました'
+        : '現在のストリーク';
+    }
 
     const randomBtn = document.getElementById('btn-random');
     const categoryBtn = document.getElementById('btn-category');
