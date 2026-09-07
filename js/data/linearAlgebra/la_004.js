@@ -6,7 +6,7 @@
   categoryLabel: '線形代数',
   difficulty: 3,
   language: 'proof',
-  description: '【系（対角化可能行列の関数）】\n$A$ が\n$$A=\\sum_{i=1}^k\\lambda_iP_i,\qquad \\sum_iP_i=I,\qquad P_iP_j=\\delta_{ij}P_i$$\nとスペクトル分解されているとする。多項式 $p(t)$ に対して\n$$p(A)=\\sum_{i=1}^kp(\\lambda_i)P_i$$\nが成り立つ。さらに有限次元実・複素ベクトル空間上では\n$$e^A=\\sum_{i=1}^ke^{\\lambda_i}P_i$$\nである。以下の証明ステップを正しい順序に並び替えよ。',
+  description: '【系（対角化可能行列の関数）】\n$A$ が\n$$A=\\sum_{i=1}^k\\lambda_iP_i,\\qquad \\sum_iP_i=I,\\qquad P_iP_j=\\delta_{ij}P_i$$\nとスペクトル分解されているとする。多項式 $p(t)$ に対して\n$$p(A)=\\sum_{i=1}^kp(\\lambda_i)P_i$$\nが成り立つ。さらに有限次元実・複素ベクトル空間上では\n$$e^A=\\sum_{i=1}^ke^{\\lambda_i}P_i$$\nである。以下の証明ステップを正しい順序に並び替えよ。',
   pinnedCode: ['【証明】'],
   blocks: [
     { id: 0, code: '射影の積の関係から\n$\\displaystyle A^2=\\sum_{i,j}\\lambda_i\\lambda_jP_iP_j=\\sum_i\\lambda_i^2P_i$\nである。', solutionComment: '異なる添字の交差項は $P_iP_j=0$ により全て消える。' },
