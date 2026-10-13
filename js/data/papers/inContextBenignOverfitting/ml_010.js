@@ -6,7 +6,7 @@
   categoryLabel: '機械学習 / 論文 / In-Context Benign Overfitting',
   difficulty: 4,
   language: 'proof',
-  description: '【命題（線形ガウス等価問題のモーメント整合）】\n中心化された特徴 $h\\in\\mathbb R^D$ とラベル $y$ を考え、$\\Sigma=E[hh^\\top]$ が正則とする。\n$$\\theta_\\star=\\Sigma^{-1}E[hy],\\qquad\\epsilon=y-h^\\top\\theta_\\star,\\qquad\\sigma_\\epsilon^2=E[\\epsilon^2]$$\nと定める。$g\\sim\\mathcal N(0,I_D)$、$\\epsilon_G\\sim\\mathcal N(0,\\sigma_\\epsilon^2)$ を独立に取り、\n$$h_G=\\Sigma^{1/2}g,\\qquad y_G=g^\\top\\Sigma^{1/2}\\theta_\\star+\\epsilon_G$$\nとする。このとき $(h_G,y_G)$ は $(h,y)$ と同じ特徴共分散、特徴とラベルの相互モーメント、残差分散を持つ。以下の証明ステップを正しい順序に並び替えよ。',
+  description: '【命題（線形ガウス等価問題のモーメント整合）】\n中心化された特徴 $h\\in\\mathbb R^D$ とラベル $y$ を考え、$\\Sigma=E[hh^\\top]$ が正則とする。\n$$\\theta_\\star=\\Sigma^{-1}E[hy],\\qquad\\epsilon=y-h^\\top\\theta_\\star,\\qquad\\sigma_\\epsilon^2=E[\\epsilon^2]$$\nと定める。$g\\sim\\mathcal N(0,I_D)$、$\\epsilon_G\\sim\\mathcal N(0,\\sigma_\\epsilon^2)$ を独立に取り、\n$$h_G=\\Sigma^{1/2}g,\\qquad y_G=g^\\top\\Sigma^{1/2}\\theta_\\star+\\epsilon_G$$\nとする。このとき $(h_G,y_G)$ は $(h,y)$ と同じ特徴共分散、特徴とラベルの相互モーメント、残差分散を持つ。以下の証明ステップを正しい順序に並び替えよ。\n\n【記号】$D$ は特徴の次元、$h$ は平均0の特徴ベクトル、$y$ はスカラーラベル、$E[\\,\\cdot\\,]$ は期待値、$\\Sigma$ は特徴共分散行列、$\\theta_\\star$ は最良線形予測係数、$\\epsilon$ はその残差、$\\sigma_\\epsilon^2$ は残差分散である。$I_D$ は $D\\times D$ 単位行列、$\\mathcal N(0,\\Sigma)$ は平均0・共分散$\\Sigma$の正規分布、$\\Sigma^{1/2}$ は $\\Sigma$ の対称平方根を表す。添字 $G$ はガウス等価問題の変数、$\\epsilon_G$ は $g$ と独立なガウスノイズを表す。',
   pinnedCode: ['【証明】'],
   blocks: [
     {

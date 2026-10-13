@@ -6,7 +6,7 @@
   categoryLabel: '機械学習 / 論文 / In-Context Benign Overfitting',
   difficulty: 3,
   language: 'proof',
-  description: '【補題（ノイズ補間による分散）】\n行フルランクな $G\\in\\mathbb R^{N\\times D}$ を固定し、$\\epsilon\\sim\\mathcal N(0,\\sigma^2I_N)$ とする。最小ノルム補間解におけるノイズ成分を\n$$u=G^\\top(GG^\\top)^{-1}\\epsilon$$\nとおく。このとき\n$$E_\\epsilon\\lVert u\\rVert_2^2=\\sigma^2\\operatorname{tr}\\bigl((GG^\\top)^{-1}\\bigr)$$\nが成り立つ。以下の証明ステップを正しい順序に並び替えよ。',
+  description: '【補題（ノイズ補間による分散）】\n行フルランクな $G\\in\\mathbb R^{N\\times D}$ を固定し、$\\epsilon\\sim\\mathcal N(0,\\sigma^2I_N)$ とする。最小ノルム補間解におけるノイズ成分を\n$$u=G^\\top(GG^\\top)^{-1}\\epsilon$$\nとおく。このとき\n$$E_\\epsilon\\lVert u\\rVert_2^2=\\sigma^2\\operatorname{tr}\\bigl((GG^\\top)^{-1}\\bigr)$$\nが成り立つ。以下の証明ステップを正しい順序に並び替えよ。\n\n【記号】$N$ は訓練方程式の数、$D$ は特徴次元、$G$ は固定した$N\\times D$行フルランク行列、$\\epsilon$ は平均0・共分散$\\sigma^2I_N$の訓練ノイズ、$u$ は補間解に現れるノイズ成分である。$A=G^\\top(GG^\\top)^{-1}$ はノイズからパラメータへの線形写像、$E_\\epsilon$ は$G$を固定して$\\epsilon$だけについて取る条件付き期待値、$\\operatorname{tr}$ はトレース、$I_N$ は$N\\times N$単位行列を表す。',
   pinnedCode: ['【証明】'],
   blocks: [
     { id: 0, code: '$A=G^\\top(GG^\\top)^{-1}$ とおくと、$u=A\\epsilon$ と書ける。', solutionComment: 'ノイズを補間する線形写像を一つの行列 $A$ としてまとめる。' },

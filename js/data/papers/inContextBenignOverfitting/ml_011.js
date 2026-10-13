@@ -6,7 +6,7 @@
   categoryLabel: '機械学習 / 論文 / In-Context Benign Overfitting',
   difficulty: 5,
   language: 'proof',
-  description: '【定理（等方LGPにおける最小ノルム補間のリスク）】\n$G\\in\\mathbb R^{N\\times D}$ の各行を独立な $\\mathcal N(0,I_D)$ とし、$D>N+1$ とする。\n$$y=G\\theta_\\star+\\epsilon,\\qquad\\epsilon\\sim\\mathcal N(0,\\sigma^2I_N)$$\nに対する最小ノルム補間解 $\\widehat\\theta=G^\\top(GG^\\top)^{-1}y$ を考える。新しい $x\\sim\\mathcal N(0,I_D)$ に対するノイズを除く予測リスクは\n$$E\\left[(x^\\top(\\widehat\\theta-\\theta_\\star))^2\\right]=\\left(1-\\frac ND\\right)\\lVert\\theta_\\star\\rVert_2^2+\\sigma^2\\frac{N}{D-N-1}$$\nである。以下の証明ステップを正しい順序に並び替えよ。',
+  description: '【定理（等方LGPにおける最小ノルム補間のリスク）】\n$G\\in\\mathbb R^{N\\times D}$ の各行を独立な $\\mathcal N(0,I_D)$ とし、$D>N+1$ とする。\n$$y=G\\theta_\\star+\\epsilon,\\qquad\\epsilon\\sim\\mathcal N(0,\\sigma^2I_N)$$\nに対する最小ノルム補間解 $\\widehat\\theta=G^\\top(GG^\\top)^{-1}y$ を考える。新しい $x\\sim\\mathcal N(0,I_D)$ に対するノイズを除く予測リスクは\n$$E\\left[(x^\\top(\\widehat\\theta-\\theta_\\star))^2\\right]=\\left(1-\\frac ND\\right)\\lVert\\theta_\\star\\rVert_2^2+\\sigma^2\\frac{N}{D-N-1}$$\nである。以下の証明ステップを正しい順序に並び替えよ。\n\n【記号】$N$ は訓練標本数、$D$ は特徴次元、$G$ は訓練特徴行列、$y\\in\\mathbb R^N$ は訓練ラベルベクトル、$\\theta_\\star\\in\\mathbb R^D$ は真の線形係数、$\\epsilon$ は訓練ノイズ、$\\sigma^2$ はその分散である。$x$ は訓練データと独立な新しい入力、$E$ は$G,\\epsilon,x$に関する期待値（添字がある場合はその変数についての条件付き期待値）を表す。$I_N,I_D$ は単位行列、$\\operatorname{tr}$ はトレース、$P$ は$G$の行空間への直交射影である。$GG^\\top$ はWishart行列であり、$D>N+1$ によりその逆行列の期待値が有限になる。',
   pinnedCode: ['【証明】'],
   blocks: [
     {

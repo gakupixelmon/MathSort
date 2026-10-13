@@ -6,7 +6,7 @@
   categoryLabel: '機械学習 / 論文 / In-Context Benign Overfitting',
   difficulty: 3,
   language: 'proof',
-  description: '【補題（最小ノルム補間解）】\n$G\\in\\mathbb R^{N\\times D}$ は行フルランクで $N<D$ とする。任意の $y\\in\\mathbb R^N$ に対して\n$$\\widehat\\theta=G^\\top(GG^\\top)^{-1}y$$\nとおく。このとき $G\\theta=y$ を満たす全ての $\\theta\\in\\mathbb R^D$ のうち、$\\widehat\\theta$ はユークリッドノルムを最小にする。以下の証明ステップを正しい順序に並び替えよ。',
+  description: '【補題（最小ノルム補間解）】\n$G\\in\\mathbb R^{N\\times D}$ は行フルランクで $N<D$ とする。任意の $y\\in\\mathbb R^N$ に対して\n$$\\widehat\\theta=G^\\top(GG^\\top)^{-1}y$$\nとおく。このとき $G\\theta=y$ を満たす全ての $\\theta\\in\\mathbb R^D$ のうち、$\\widehat\\theta$ はユークリッドノルムを最小にする。以下の証明ステップを正しい順序に並び替えよ。\n\n【記号】$N$ は方程式の数、$D$ は未知ベクトルの次元、$G$ は$N\\times D$の訓練行列、$y$ は目標ベクトル、$\\widehat\\theta$ は最小ノルム補間解である。$G^\\top$ は転置、$GG^\\top$ はGram行列、$\\ker G$ は$G$の零空間、$\\operatorname{row}(G)$ は行空間、$\\lVert\\cdot\\rVert_2$ はユークリッドノルムを表す。$G$ が行フルランクなので、$GG^\\top$ は正則である。',
   pinnedCode: ['【証明】'],
   blocks: [
     { id: 0, code: '$G$ は行フルランクなので、$GG^\\top\\in\\mathbb R^{N\\times N}$ は正則である。', solutionComment: '∵ $u\\ne0$ なら $u^\\top GG^\\top u=\\lVert G^\\top u\\rVert_2^2>0$。' },
