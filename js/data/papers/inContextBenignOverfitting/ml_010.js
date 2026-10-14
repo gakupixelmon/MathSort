@@ -6,7 +6,7 @@
   categoryLabel: '機械学習 / 論文 / In-Context Benign Overfitting',
   difficulty: 4,
   language: 'proof',
-  description: '【命題（線形ガウス等価問題のモーメント整合）】\n中心化された特徴 $h\\in\\mathbb R^D$ とラベル $y$ を考え、$\\Sigma=E[hh^\\top]$ が正則とする。\n$$\\theta_\\star=\\Sigma^{-1}E[hy],\\qquad\\epsilon=y-h^\\top\\theta_\\star,\\qquad\\sigma_\\epsilon^2=E[\\epsilon^2]$$\nと定める。$g\\sim\\mathcal N(0,I_D)$、$\\epsilon_G\\sim\\mathcal N(0,\\sigma_\\epsilon^2)$ を独立に取り、\n$$h_G=\\Sigma^{1/2}g,\\qquad y_G=g^\\top\\Sigma^{1/2}\\theta_\\star+\\epsilon_G$$\nとする。このとき $(h_G,y_G)$ は $(h,y)$ と同じ特徴共分散、特徴とラベルの相互モーメント、残差分散を持つ。以下の証明ステップを正しい順序に並び替えよ。\n\n【記号】$D$ は特徴の次元、$h$ は平均0の特徴ベクトル、$y$ はスカラーラベル、$E[\\,\\cdot\\,]$ は期待値、$\\Sigma$ は特徴共分散行列、$\\theta_\\star$ は最良線形予測係数、$\\epsilon$ はその残差、$\\sigma_\\epsilon^2$ は残差分散である。$I_D$ は $D\\times D$ 単位行列、$\\mathcal N(0,\\Sigma)$ は平均0・共分散$\\Sigma$の正規分布、$\\Sigma^{1/2}$ は $\\Sigma$ の対称平方根を表す。添字 $G$ はガウス等価問題の変数、$\\epsilon_G$ は $g$ と独立なガウスノイズを表す。',
+  description: '【命題（線形ガウス等価問題のモーメント整合）】\n中心化された特徴 $h\\in\\mathbb R^D$ とラベル $y$ を考え、$\\Sigma=E[hh^\\top]$ が正則とする。\n$$\\theta_\\star=\\Sigma^{-1}E[hy],\\qquad\\epsilon=y-h^\\top\\theta_\\star,\\qquad\\sigma_\\epsilon^2=E[\\epsilon^2]$$\nと定める。$g\\sim\\mathcal N(0,I_D)$、$\\epsilon_G\\sim\\mathcal N(0,\\sigma_\\epsilon^2)$ を独立に取り、\n$$h_G=\\Sigma^{1/2}g,\\qquad y_G=g^\\top\\Sigma^{1/2}\\theta_\\star+\\epsilon_G$$\nとする。このとき $(h_G,y_G)$ は $(h,y)$ と同じ特徴共分散、特徴とラベルの相互モーメント、残差分散を持つ。以下の証明ステップを正しい順序に並び替えよ。\n\n【記号】$D$ は特徴の次元、$h$ は平均0の特徴ベクトル、$y$ はスカラーラベル、$E[\\,\\cdot\\,]$ は期待値、$\\Sigma$ は特徴共分散行列、$\\theta_\\star$ は最良線形予測係数、$\\epsilon$ はその残差、$\\sigma_\\epsilon^2$ は残差分散である。$I_D$ は $D\\times D$ 単位行列、$\\mathcal N(0,\\Sigma)$ は平均0・共分散$\\Sigma$の正規分布、$\\Sigma^{1/2}$ は $\\Sigma$ の対称平方根を表す。添字 $G$ はガウス等価問題の変数、$\\epsilon_G$ は $g$ と独立なガウスノイズを表す。\n\n【用語・式の意味】\n「中心化」とは $E[h]=0$ となるように特徴の平均を差し引くこと。このとき $\\Sigma=E[hh^\\top]$ は特徴のばらつきと方向ごとの相関を表す共分散行列になる。「正則」とは逆行列を持つことなので、$\\Sigma^{-1}$ が定義できる。\n\n$\\theta_\\star$ は、特徴 $h$ からラベル $y$ を線形予測する係数で、\\n$$\\theta_\\star=\\mathop{\\rm argmin}_{\\theta\\in\\mathbb R^D}E\\left[(y-h^\\top\\theta)^2\\right]$$\\nを満たす母集団最小二乗解である。最小化の一階条件が $\\Sigma\\theta_\\star=E[hy]$ となり、$\\theta_\\star=\\Sigma^{-1}E[hy]$ はこの方程式を解いた形である。\n\n$\\epsilon=y-h^\\top\\theta_\\star$ は線形予測で説明できなかった残差、$\\sigma_\\epsilon^2=E[\\epsilon^2]$ はその平均二乗の大きさ（残差分散）である。最適係数を選んだため、残差は特徴と直交し、$E[h\\epsilon]=0$ となる。ここでいう直交は確率変数の内積ではなく、相関が0という意味である。\n\n「モーメント整合」とは、二つの確率モデルの全ての分布を一致させることではなく、解析で重要な統計量を一致させることをいう。この問題で合わせるのは、特徴共分散 $E[hh^\\top]$、特徴とラベルの相互モーメント $E[hy]$、線形予測残差の分散 $E[\\epsilon^2]$ の3つである。\n\n$g\\sim\\mathcal N(0,I_D)$ は各方向の分散が1の標準ガウスベクトルで、$h_G=\\Sigma^{1/2}g$ と変換すると共分散が $\\Sigma$ になる。$\\Sigma^{1/2}$ は $\\Sigma^{1/2}\\Sigma^{1/2}=\\Sigma$ を満たす対称行列である。$y_G$ は「線形信号 $g^\\top\\Sigma^{1/2}\\theta_\\star$」と「独立なガウスノイズ $\\epsilon_G$」の和であり、これをLGP（Linear Gaussian Problem、線形ガウス問題）またはガウス等価問題と呼ぶ。\n\nガウス等価問題は元の $(h,y)$ の分布そのものを再現するものではない。元の特徴分布が非ガウスでも、上の3つのモーメントを保つ単純なガウスモデルに置き換えることで、線形回帰のリスクを解析しやすくするのが目的である。添字 $G$ は「元の変数ではなく、この置き換え後のガウスモデルの変数」を表す。',
   pinnedCode: ['【証明】'],
   blocks: [
     {
@@ -67,3 +67,7 @@
     tip: '複雑なモデルを解析可能な等価問題へ置き換えるときは、何の統計量を保存し、何を近似として捨てているかを分けて考えるのが大切です。',
   },
 });
+
+// 補足欄の改行を、表示時に文字列の "\\n" として残さない。
+const ml010Problem = window.PROBLEMS_REGISTRY[window.PROBLEMS_REGISTRY.length - 1];
+ml010Problem.description = ml010Problem.description.replace(/\\n(?![A-Za-z])/g, '\n');
